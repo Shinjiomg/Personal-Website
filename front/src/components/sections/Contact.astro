@@ -24,12 +24,15 @@ const contactInfo = [
 ];
 ---
 
-<section id="contact" class="py-20 bg-gray-900 overflow-hidden">
+<section
+    id="contact"
+    class="py-20 bg-gray-900 overflow-hidden min-h-screen flex items-center justify-center"
+>
     <div
         class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(99,102,241,0.1),transparent_50%)]"
     >
     </div>
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-8">
         <div class="max-w-3xl mx-auto text-center mb-16">
             <h2 class="text-4xl sm:text-5xl font-bold mb-4">
                 <span class="bg-clip-text text-transparent bg-primary"
@@ -96,7 +99,7 @@ const contactInfo = [
                     </button>
                 </div>
             </div>
-            <ContactForm client:load/>
+            <ContactForm client:load />
         </div>
     </div>
 </section>
