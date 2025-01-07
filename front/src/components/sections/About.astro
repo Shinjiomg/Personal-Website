@@ -1,0 +1,71 @@
+---
+const skills = [
+    { name: "Angular", level: 90 },
+    { name: "TypeScript", level: 85 },
+    { name: "Tailwind CSS", level: 95 },
+    { name: "Astro", level: 80 },
+    { name: "Node.js", level: 75 },
+    { name: "Diseño UI/UX", level: 85 },
+];
+---
+
+<section id="about" class="relative pt-24 pb-16 min-h-screen">
+    <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(99,102,241,0.1),transparent_50%)]"
+    >
+    </div>
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-6">
+                    Sobre mí
+                </h2>
+                <p class="text-lg text-gray-300 mb-6">
+                    Soy un desarrollador frontend apasionado por crear
+                    experiencias web excepcionales. Me especializo en construir
+                    aplicaciones web modernas y responsivas que no solo se ven
+                    geniales, sino que también funcionan perfectamente.
+                </p>
+                <p class="text-lg text-gray-300 mb-8">
+                    Con más de 2 años de experiencia en el desarrollo web, he
+                    trabajado con diversas tecnologías y frameworks, siempre
+                    manteniéndome actualizado con las últimas tendencias y
+                    mejores prácticas.
+                </p>
+                <div class="grid grid-cols-2 gap-4">
+                    {
+                        skills.map((skill) => (
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-medium text-white">
+                                        {skill.name}
+                                    </span>
+                                    <span class="text-primary">
+                                        {skill.level}%
+                                    </span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div
+                                        class="bg-gradient-to-r from-gradient-start to-gradient-end h-2 rounded-full"
+                                        style={`width: ${skill.level}%`}
+                                    />
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+            <div class="gap-8">
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-gradient-start to-gradient-end opacity-10 blur-3xl"
+                >
+                </div>
+                <img
+                    src="../../../src/assets/bg.webp"
+                    alt="Workspace"
+                    class="relative rounded-2xl shadow-2xl"
+                />
+            </div>
+        </div>
+    </div>
+</section>

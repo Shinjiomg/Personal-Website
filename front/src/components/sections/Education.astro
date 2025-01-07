@@ -1,0 +1,176 @@
+---
+const education = [
+    {
+        title: "Ingeniería de Software",
+        institution: "Corporación Universitaria Iberoamericana",
+        period: "2024 - Actualidad",
+        description:
+            "Especialización en tecnologías web modernas y arquitectura frontend.",
+        courses: [
+            "Arquitectura de Aplicaciones Web",
+            "Desarrollo Avanzado de Aplicaciones Web",
+            "Optimización y Rendimiento Web",
+            "Diseño UX/UI",
+        ],
+    },
+    {
+        title: "Desarrollo de Software",
+        institution: "Universidad de Cundinamarca",
+        period: "2018 - 2022",
+        description:
+            "Fundamentos de programación, estructuras de datos y arquitectura de software.",
+        courses: [
+            "Algoritmos y Estructuras de Datos",
+            "Arquitectura de Redes y Sistemas Operativos",
+            "Bases de Datos",
+            "Desarrollo Web",
+        ],
+    },
+];
+
+const certifications = [
+    {
+        name: "UX/UI y Prototipado Digital",
+        issuer: "Udemy",
+        date: "2022",
+    },
+    {
+        name: "Git y GitHub Completo Desde Cero",
+        issuer: "Udemy",
+        date: "2022",
+    },
+    {
+        name: "Fundamentos de Programación",
+        issuer: "Udemy",
+        date: "2022",
+    },
+];
+---
+
+<section id="education" class="py-20 bg-gray-900">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4">
+                Educación y Certificaciones
+            </h2>
+            <p class="text-lg text-gray-300 max-w-2xl mx-auto">
+                Formación académica y desarrollo profesional continuo.
+            </p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12">
+            <div>
+                <h3 class="text-2xl font-bold text-accent mb-8">
+                    Educación Formal
+                </h3>
+                <div class="space-y-8">
+                    {
+                        education.map((edu) => (
+                            <div class="bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+                                <span class="inline-block px-4 py-2 rounded-full text-sm font-medium bg-primary/10 text-accent mb-4">
+                                    {edu.period}
+                                </span>
+                                <h4 class="text-xl font-bold text-white mb-2">
+                                    {edu.title}
+                                </h4>
+                                <h5 class="text-lg font-semibold text-primary mb-4">
+                                    {edu.institution}
+                                </h5>
+                                <p class="text-gray-300 mb-4">
+                                    {edu.description}
+                                </p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    {edu.courses.map((course) => (
+                                        <span class="px-3 py-1 bg-gray-700 text-gray-200 rounded-lg text-sm">
+                                            {course}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-bold text-accent mb-8">
+                    Certificaciones
+                </h3>
+                <div class="space-y-4">
+                    {
+                        certifications.map((cert) => (
+                            <div class="bg-gradient-to-r from-gradient-start/5 to-gradient-end/5 backdrop-blur-sm rounded-xl p-6 border border-gradient-start/20">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="text-lg font-bold text-white">
+                                        {cert.name}
+                                    </h4>
+                                    <span class="text-sm text-primary">
+                                        {cert.date}
+                                    </span>
+                                </div>
+                                <p class="text-gray-300">{cert.issuer}</p>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <div class="mt-12">
+                    <h3 class="text-2xl font-bold text-accent mb-8">
+                        Habilidades Técnicas
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-4">
+                            <h4 class="font-semibold text-white">Frontend</h4>
+                            <div class="space-y-2">
+                                {
+                                    [
+                                        "Astro",
+                                        "Angular",
+                                        "TypeScript",
+                                        "TailwindCSS",
+                                    ].map((skill) => (
+                                        <div class="flex items-center">
+                                            <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                                <div
+                                                    class="bg-gradient-to-r from-gradient-start to-gradient-end h-2.5 rounded-full"
+                                                    style={`width: ${Math.random() * 20 + 80}%`}
+                                                />
+                                            </div>
+                                            <span class="ml-2 text-sm text-gray-300">
+                                                {skill}
+                                            </span>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="font-semibold text-white">
+                                Herramientas
+                            </h4>
+                            <div class="space-y-2">
+                                {
+                                    ["Github", "Node.js", "SCRUM", "Figma"].map(
+                                        (skill) => (
+                                            <div class="flex items-center">
+                                                <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                                    <div
+                                                        class="bg-gradient-to-r from-gradient-start to-gradient-end h-2.5 rounded-full"
+                                                        style={`width: ${Math.random() * 20 + 80}%`}
+                                                    />
+                                                </div>
+                                                <span class="ml-2 text-sm text-gray-300">
+                                                    {skill}
+                                                </span>
+                                            </div>
+                                        ),
+                                    )
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

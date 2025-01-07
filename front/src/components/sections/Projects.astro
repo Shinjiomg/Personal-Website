@@ -1,0 +1,94 @@
+---
+const projects = [
+    {
+        title: "Portafolio Personal - Psicóloga",
+        description:
+            "Demostración de un portafolio profesional con información sobre experiencia profesional y habilidades.",
+        image: "../../../src/assets/portafolio.webp",
+        tags: ["Astro", "Javascript", "Tailwind"],
+        link: "https://demoportfolio-bombaweb.vercel.app/",
+    },
+    {
+        title: "Agencia de Desarrollo Web - Freelance",
+        description:
+            "Sitio web de agencia de desarrollo con servicios de desarrollo web y sitios web personalizados.",
+        image: "../../../src/assets/bombaweb.webp",
+        tags: ["Astro", "Javscript", "Tailwind", "Solid.js"],
+        link: "https://bombaweb.vercel.app/",
+    },
+    {
+        title: "Sitio Web Personalizado",
+        description:
+            "Demostración de un sitio web personalizado con múltiples paginas y funciones avanzadas.",
+        image: "https://images.unsplash.com/photo-1432888622747-4eb9a8f2c293?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        tags: ["Astro", "Javascript", "Tailwind", "Solid.js"],
+        link: "#",
+    },
+];
+---
+
+<section id="projects" class="py-20">
+    <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(99,102,241,0.1),transparent_50%)]"
+    >
+    </div>
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4">
+                Proyectos Destacados
+            </h2>
+            <p class="text-lg text-gray-300 max-w-2xl mx-auto">
+                Una selección de mis trabajos más recientes y destacados en
+                desarrollo frontend.
+            </p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {
+                projects.map((project) => (
+                    <article class="bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <img
+                            src={project.image}
+                            alt={project.title}
+                            class="w-full h-48 object-cover"
+                        />
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">
+                                {project.title}
+                            </h3>
+                            <p class="text-gray-300 mb-4">
+                                {project.description}
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                {project.tags.map((tag) => (
+                                    <span class="px-3 py-1 bg-gray-700 text-gray-200 rounded-full text-sm">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                            <a
+                                href={project.link}
+                                target="_blank"
+                                class="inline-flex items-center text-primary hover:text-accent transition-colors"
+                            >
+                                Ver proyecto
+                                <svg
+                                    class="w-5 h-5 ml-2"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                    />
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+                ))
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,115 @@
+---
+const navItems = [
+    {
+        title: "Inicio",
+        url: "/#home",
+    },
+    {
+        title: "Sobre mí",
+        url: "/#about",
+    },
+    {
+        title: "Educación",
+        url: "/#education",
+    },
+    {
+        title: "Experiencia",
+        url: "/#experience",
+    },
+    {
+        title: "Proyectos",
+        url: "/#projects",
+    },
+];
+---
+
+<header
+    class="fixed z-50 w-full transition-all duration-300 bg-transparent py-4"
+    id="header"
+>
+    <nav class="flex items-center justify-between px-6 max-w-7xl mx-auto">
+        <div class="flex lg:flex-1">
+            <a href="#home" class="flex items-center space-x-2" data-scroll>
+                <div class="relative w-10 h-10">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-gradient-start to-gradient-end rounded-lg transform hover:rotate-6 transition-transform"
+                    >
+                    </div>
+                    <div
+                        class="absolute inset-0.5 bg-gray-900 rounded-lg flex items-center justify-center font-bold text-xl"
+                    >
+                        <span
+                            class="bg-clip-text text-transparent bg-gradient-to-r from-gradient-start to-gradient-end"
+                            >&lt;/&gt;</span
+                        >
+                    </div>
+                </div>
+                <span
+                    class="text-xl font-bold bg-clip-text text-transparent bg-accent"
+                >
+                    Jhonatan Becerra
+                </span>
+            </a>
+        </div>
+
+        <div class="hidden lg:flex lg:gap-x-8">
+            {
+                navItems.map(({ title, url }) => (
+                    <a href={url} class="relative px-4 py-2">
+                        <span class="relative z-10 text-sm font-medium text-gray-100 transition-colors hover:text-accent" data-scroll>
+                            {title}
+                        </span>
+                    </a>
+                ))
+            }
+            <a href="#contact" class="relative px-4 py-2" data-scroll>
+                <span
+                    class="relative z-10 py-3 px-6 text-sm font-medium text-gray-100 transition-colors hover:bg-accent/10 hover:text-accent border border-accent rounded-full"
+                    >Contacto</span
+                >
+            </a>
+        </div>
+
+        <div class="flex lg:hidden">
+            <button
+                type="button"
+                class="relative w-10 h-10 transition-colors hover:bg-accent/10 hover:text-accent hover:border hover:border-accent rounded-lg"
+            >
+                <div class="absolute inset-0"></div>
+                <div
+                    class="relative h-full flex items-center justify-center text-white hover:text-white transition-colors"
+                >
+                    <svg
+                        class="h-6 w-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </div>
+            </button>
+        </div>
+    </nav>
+</header>
+
+<script>
+    const header = document.getElementById("header");
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 0) {
+            header?.classList.remove("absolute", "bg-transparent");
+            header?.classList.add("fixed", "bg-primary/15", "backdrop-blur-lg");
+        } else {
+            header?.classList.remove(
+                "fixed",
+                "bg-primary/15",
+                "backdrop-blur-lg",
+            );
+            header?.classList.add("absolute", "bg-transparent");
+        }
+    });
+</script>
