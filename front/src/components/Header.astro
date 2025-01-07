@@ -52,11 +52,14 @@ const navItems = [
             </a>
         </div>
 
-        <div class="hidden lg:flex lg:gap-x-8">
+        <div class="flex lg:gap-x-8">
             {
                 navItems.map(({ title, url }) => (
-                    <a href={url} class="relative px-4 py-2">
-                        <span class="relative z-10 text-sm font-medium text-gray-100 transition-colors hover:text-accent" data-scroll>
+                    <a href={url} class="relative px-4 py-2 hidden md:block">
+                        <span
+                            class="relative z-10 text-sm font-medium text-gray-100 transition-colors hover:text-accent"
+                            data-scroll
+                        >
                             {title}
                         </span>
                     </a>
@@ -68,31 +71,6 @@ const navItems = [
                     >Contacto</span
                 >
             </a>
-        </div>
-
-        <div class="flex lg:hidden">
-            <button
-                type="button"
-                class="relative w-10 h-10 transition-colors hover:bg-accent/10 hover:text-accent hover:border hover:border-accent rounded-lg"
-            >
-                <div class="absolute inset-0"></div>
-                <div
-                    class="relative h-full flex items-center justify-center text-white hover:text-white transition-colors"
-                >
-                    <svg
-                        class="h-6 w-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </div>
-            </button>
         </div>
     </nav>
 </header>
