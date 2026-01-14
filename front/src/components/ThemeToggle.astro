@@ -3,7 +3,7 @@
 
 <button
     id="theme-toggle"
-    class="fixed top-24 right-8 z-40 p-3 bg-gray-800/80 backdrop-blur-sm border border-gray-700/50 text-gray-300 rounded-full shadow-lg hover:bg-gray-800 hover:text-white hover:border-primary/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-900"
+    class="fixed top-24 right-8 z-50 p-3 bg-gray-800/80 backdrop-blur-sm border border-gray-700/50 text-gray-300 rounded-full shadow-lg hover:bg-gray-800 hover:text-white hover:border-primary/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-900"
     aria-label="Cambiar tema"
     title="Cambiar tema"
 >
@@ -24,23 +24,15 @@
         const moonIcon = document.getElementById('moon-icon');
         const html = document.documentElement;
         
+        // Store observer reference and flag - declare early to avoid reference errors
+        let themeObserver: MutationObserver | null = null;
+        let isApplyingStyles = false; // Flag to prevent infinite loops
+        
         // Check for saved theme preference or default to dark
         const currentTheme = localStorage.getItem('theme') || 'dark';
+        
+        // Apply theme immediately
         html.setAttribute('data-theme', currentTheme);
-        updateIcons(currentTheme === 'light');
-        
-        themeToggle?.addEventListener('click', () => {
-            const currentThemeAttr = html.getAttribute('data-theme') || 'dark';
-            const newTheme = currentThemeAttr === 'light' ? 'dark' : 'light';
-            
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateIcons(newTheme === 'light');
-            applyThemeStyles(newTheme === 'light');
-        });
-        
-        // Apply theme styles on load
-        applyThemeStyles(currentTheme === 'light');
         
         function updateIcons(isLight: boolean) {
             if (isLight) {
@@ -52,21 +44,71 @@
             }
         }
         
+        // Function to remove all theme-related inline styles
+        function removeAllThemeStyles() {
+            // Find all elements with data-theme-style attribute
+            const styledElements = document.querySelectorAll('[data-theme-style]');
+            styledElements.forEach((el) => {
+                if (el instanceof HTMLElement) {
+                    el.removeAttribute('data-theme-style');
+                    // Remove with !important by setting to empty and then removing
+                    el.style.setProperty('background-color', '', 'important');
+                    el.style.setProperty('color', '', 'important');
+                    el.style.setProperty('border-color', '', 'important');
+                    el.style.removeProperty('background-color');
+                    el.style.removeProperty('color');
+                    el.style.removeProperty('border-color');
+                }
+            });
+            
+            // Also remove inline styles from all elements that might have been styled
+            const allElements = document.querySelectorAll('*');
+            allElements.forEach((el) => {
+                if (el instanceof HTMLElement) {
+                    const style = el.style;
+                    // Check if element has inline styles that match our theme colors
+                    const bgColor = style.getPropertyValue('background-color');
+                    const textColor = style.getPropertyValue('color');
+                    const borderColor = style.getPropertyValue('border-color');
+                    
+                    // Remove if it's a light mode color (white/light gray backgrounds, dark text)
+                    if (bgColor && (bgColor.includes('255, 255, 255') || bgColor.includes('rgb(255, 255, 255') || bgColor.includes('#ffffff') || bgColor.includes('#f3f4f6') || bgColor.includes('rgba(255, 255, 255'))) {
+                        style.setProperty('background-color', '', 'important');
+                        style.removeProperty('background-color');
+                    }
+                    if (textColor && (textColor.includes('#111827') || textColor.includes('#4b5563') || textColor.includes('#6b7280'))) {
+                        style.setProperty('color', '', 'important');
+                        style.removeProperty('color');
+                    }
+                    if (borderColor && (borderColor.includes('#e5e7eb') || borderColor.includes('#d1d5db'))) {
+                        style.setProperty('border-color', '', 'important');
+                        style.removeProperty('border-color');
+                    }
+                }
+            });
+            
+            // Force a reflow to ensure CSS takes over
+            void document.body.offsetHeight;
+        }
+        
         // Function to apply theme styles dynamically
         function applyThemeStyles(isLight: boolean) {
             if (!isLight) {
-                // Remove inline styles when switching back to dark
-                const styledElements = document.querySelectorAll('[data-theme-style]');
-                styledElements.forEach((el) => {
-                    if (el instanceof HTMLElement) {
-                        el.removeAttribute('data-theme-style');
-                        el.style.removeProperty('background-color');
-                        el.style.removeProperty('color');
-                        el.style.removeProperty('border-color');
-                    }
-                });
+                // Disconnect observer if it exists
+                if (themeObserver) {
+                    themeObserver.disconnect();
+                    themeObserver = null;
+                }
+                // Remove all inline styles
+                isApplyingStyles = true;
+                removeAllThemeStyles();
+                isApplyingStyles = false;
                 return;
             }
+            
+            // Prevent infinite loops
+            if (isApplyingStyles) return;
+            isApplyingStyles = true;
             
             function applyStyles() {
                 // Find all elements with gray backgrounds
@@ -159,13 +201,33 @@
             // Apply immediately
             applyStyles();
             
-            // Apply after a short delay for dynamic content
-            setTimeout(applyStyles, 100);
-            setTimeout(applyStyles, 500);
+            // Apply after a short delay for dynamic content (only if not already applying)
+            setTimeout(() => {
+                if (!isApplyingStyles) {
+                    applyStyles();
+                }
+            }, 100);
+            setTimeout(() => {
+                if (!isApplyingStyles) {
+                    applyStyles();
+                }
+            }, 500);
             
             // Use MutationObserver for dynamically added content
             if (typeof MutationObserver !== 'undefined') {
-                const observer = new MutationObserver((mutations) => {
+                // Disconnect previous observer if exists
+                if (themeObserver) {
+                    themeObserver.disconnect();
+                }
+                
+                themeObserver = new MutationObserver((mutations) => {
+                    // Skip if we're currently applying styles to prevent loops
+                    if (isApplyingStyles) return;
+                    
+                    // Only process if we're in light mode
+                    const currentTheme = html.getAttribute('data-theme') || 'dark';
+                    if (currentTheme !== 'light') return;
+                    
                     // Check if header classes changed
                     const headerChanged = mutations.some(mutation => {
                         if (mutation.target instanceof HTMLElement) {
@@ -176,7 +238,8 @@
                         return false;
                     });
                     
-                    if (headerChanged) {
+                    if (headerChanged && !isApplyingStyles) {
+                        isApplyingStyles = true;
                         // Reapply styles to header specifically
                         const header = document.getElementById('header');
                         if (header && header instanceof HTMLElement) {
@@ -188,27 +251,66 @@
                                 header.style.setProperty('border-bottom-color', '#e5e7eb', 'important');
                             }
                         }
+                        isApplyingStyles = false;
                     }
-                    
-                    applyStyles();
                 });
                 
-                observer.observe(document.body, {
+                themeObserver.observe(document.body, {
                     childList: true,
                     subtree: true,
                     attributes: true,
                     attributeFilter: ['class']
                 });
                 
-                // Keep observer active for theme changes
-                // Don't disconnect, let it run while in light mode
+                // Keep observer active for theme changes while in light mode
             }
+            
+            isApplyingStyles = false;
         }
         
-        // Initial theme application
+        // Initialize icons
+        updateIcons(currentTheme === 'light');
+        
+        // Apply theme styles on initial load
         if (currentTheme === 'light') {
-            html.setAttribute('data-theme', 'light');
+            // Use multiple timeouts to ensure DOM is ready
+            setTimeout(() => {
+                if (!isApplyingStyles) {
+                    applyThemeStyles(true);
+                }
+            }, 50);
+            setTimeout(() => {
+                if (!isApplyingStyles) {
+                    applyThemeStyles(true);
+                }
+            }, 200);
+            setTimeout(() => {
+                if (!isApplyingStyles) {
+                    applyThemeStyles(true);
+                }
+            }, 500);
         }
+        
+        // Toggle on click
+        themeToggle?.addEventListener('click', () => {
+            const currentThemeAttr = html.getAttribute('data-theme') || 'dark';
+            const newTheme = currentThemeAttr === 'light' ? 'dark' : 'light';
+            
+            // Update theme attribute first
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update icons
+            updateIcons(newTheme === 'light');
+            
+            // Apply or remove styles based on theme
+            if (newTheme === 'light') {
+                applyThemeStyles(true);
+            } else {
+                // Remove all inline styles to let CSS take over for dark mode
+                removeAllThemeStyles();
+            }
+        });
     });
 </script>
 

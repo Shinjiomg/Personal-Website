@@ -3,45 +3,55 @@
 
 <button
     id="back-to-top"
-    class="fixed bottom-28 right-8 z-40 p-3 bg-primary text-white rounded-full shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 opacity-0 pointer-events-none translate-y-10 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-900"
+    class="group fixed bottom-28 right-8 z-[100] p-3 bg-primary text-white rounded-full shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 opacity-0 pointer-events-none translate-y-10 hover:scale-110 active:scale-95 click-scale btn-ripple overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-900"
+    style="position: fixed !important; z-index: 100 !important;"
     aria-label="Volver arriba"
 >
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- Shine effect -->
+    <div class="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+    <svg class="w-6 h-6 relative z-10 transform group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
     </svg>
 </button>
 
 <script>
-    const backToTopButton = document.getElementById('back-to-top');
-    let ticking = false;
-
-    function updateBackToTop() {
-        const scrollY = window.scrollY;
+    document.addEventListener('DOMContentLoaded', () => {
+        const backToTopButton = document.getElementById('back-to-top');
+        if (!backToTopButton) return;
         
-        if (scrollY > 300) {
-            backToTopButton?.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-10');
-            backToTopButton?.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
-        } else {
-            backToTopButton?.classList.add('opacity-0', 'pointer-events-none', 'translate-y-10');
-            backToTopButton?.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+        let ticking = false;
+
+        function updateBackToTop() {
+            const scrollY = window.scrollY;
+            
+            if (scrollY > 300) {
+                backToTopButton.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-10');
+                backToTopButton.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            } else {
+                backToTopButton.classList.add('opacity-0', 'pointer-events-none', 'translate-y-10');
+                backToTopButton.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            }
+            
+            ticking = false;
         }
+
+        function requestTick() {
+            if (!ticking) {
+                window.requestAnimationFrame(updateBackToTop);
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestTick);
         
-        ticking = false;
-    }
-
-    function requestTick() {
-        if (!ticking) {
-            window.requestAnimationFrame(updateBackToTop);
-            ticking = true;
-        }
-    }
-
-    window.addEventListener('scroll', requestTick);
-    
-    backToTopButton?.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+        // Initial check
+        updateBackToTop();
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
     });
 </script>

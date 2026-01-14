@@ -1,0 +1,95 @@
+---
+---
+
+<button
+    id="language-toggle"
+    class="group fixed top-40 right-8 z-50 px-4 py-3 bg-gray-800/80 backdrop-blur-sm border border-gray-700/50 text-gray-300 rounded-full shadow-lg hover:bg-gray-800 hover:text-white hover:border-primary/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-900 flex items-center gap-2"
+    aria-label="Cambiar idioma / Change language"
+    title="Cambiar idioma / Change language"
+>
+    <!-- Globe icon -->
+    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+    </svg>
+    <!-- Current language -->
+    <span id="lang-es" class="text-sm font-bold">ES</span>
+    <span id="lang-en" class="text-sm font-bold hidden">EN</span>
+    <!-- Arrow icon -->
+    <svg class="w-4 h-4 transform group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+    </svg>
+</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const languageToggle = document.getElementById('language-toggle');
+        const langES = document.getElementById('lang-es');
+        const langEN = document.getElementById('lang-en');
+        const html = document.documentElement;
+        
+        // Get current language
+        function getCurrentLanguage(): 'es' | 'en' {
+            if (typeof window === 'undefined') return 'es';
+            const saved = localStorage.getItem('language');
+            return (saved === 'es' || saved === 'en') ? saved : 'es';
+        }
+        
+        // Update UI without reloading
+        function updateLanguageUI(lang: 'es' | 'en', reload: boolean = false) {
+            localStorage.setItem('language', lang);
+            html.setAttribute('lang', lang);
+            html.setAttribute('data-language', lang);
+            
+            // Update icons
+            if (lang === 'es') {
+                langES?.classList.remove('hidden');
+                langEN?.classList.add('hidden');
+            } else {
+                langES?.classList.add('hidden');
+                langEN?.classList.remove('hidden');
+            }
+            
+            // Dispatch custom event for components to listen
+            window.dispatchEvent(new CustomEvent('languagechange', { detail: { language: lang } }));
+            
+            // Only reload if explicitly requested (on user click)
+            if (reload) {
+                window.location.reload();
+            }
+        }
+        
+        // Initialize without reloading
+        const currentLang = getCurrentLanguage();
+        updateLanguageUI(currentLang, false);
+        
+        // Toggle on click (with reload)
+        languageToggle?.addEventListener('click', () => {
+            const current = getCurrentLanguage();
+            const newLang = current === 'es' ? 'en' : 'es';
+            updateLanguageUI(newLang, true);
+        });
+    });
+</script>
+
+<style>
+    html[data-theme="light"] #language-toggle {
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        border-color: #e5e7eb !important;
+        color: #4b5563 !important;
+    }
+    
+    html[data-theme="light"] #language-toggle:hover {
+        background-color: #f3f4f6 !important;
+        border-color: #3b82f6 !important;
+        color: #111827 !important;
+    }
+    
+    /* Make it more obvious it's a language selector */
+    #language-toggle {
+        min-width: 100px;
+    }
+    
+    #language-toggle:hover {
+        transform: scale(1.05);
+    }
+</style>

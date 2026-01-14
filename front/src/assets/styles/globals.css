@@ -170,4 +170,95 @@
     .text-gradient {
         @apply bg-clip-text text-transparent bg-primary;
     }
+    
+    /* Button ripple effect */
+    .btn-ripple {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn-ripple::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+    
+    .btn-ripple:active::after {
+        width: 300px;
+        height: 300px;
+    }
+    
+    /* Smooth transitions for interactive elements */
+    button,
+    a,
+    [role="button"] {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Card hover effect with subtle lift */
+    .card-hover {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+        transform: translateY(-4px);
+    }
+    
+    /* Icon hover rotation */
+    .icon-hover {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .icon-hover:hover {
+        transform: rotate(5deg) scale(1.1);
+    }
+    
+    /* Loading spinner smooth */
+    @keyframes spin-smooth {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    
+    .animate-spin-smooth {
+        animation: spin-smooth 1s linear infinite;
+    }
+    
+    /* Pulse glow effect */
+    @keyframes pulse-glow {
+        0%, 100% {
+            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+        }
+        50% {
+            box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+        }
+    }
+    
+    .animate-pulse-glow {
+        animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    
+    /* Smooth scale on click */
+    .click-scale:active {
+        transform: scale(0.98);
+    }
+    
+    /* Smooth border glow */
+    .border-glow {
+        transition: box-shadow 0.3s ease;
+    }
+    
+    .border-glow:hover {
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    }
 }

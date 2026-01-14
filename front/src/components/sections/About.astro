@@ -19,16 +19,16 @@ const skills = [
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <!-- Section header -->
         <div class="text-center mb-16">
-            <span class="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
+            <span class="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4" data-i18n-about="badge">
                 Sobre Mí
             </span>
             <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4">
-                <span class="text-white">Construyendo el</span>
-                <span class="block text-primary">
+                <span class="text-white" data-i18n-about="title">Construyendo el</span>
+                <span class="block text-primary" data-i18n-about="titleHighlight">
                     futuro digital
                 </span>
             </h2>
-            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto" data-i18n-about="subtitle">
                 Con pasión por la excelencia y atención al detalle
             </p>
         </div>
@@ -40,9 +40,9 @@ const skills = [
                 <div class="bg-gray-800/40 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 lg:p-12">
                     <div class="space-y-6">
                         <p class="text-xl lg:text-2xl text-gray-300 leading-relaxed">
-                            Soy un <span class="text-primary font-semibold">desarrollador frontend</span> con más de 3 años de experiencia especializado en crear experiencias web excepcionales. Mi enfoque combina diseño elegante con código de alta calidad.
+                            <span data-i18n-about="description1">Soy un</span> <span class="text-primary font-semibold" data-i18n-about="description1Highlight">desarrollador frontend</span> <span data-i18n-about="description1Rest">con más de 3 años de experiencia especializado en crear experiencias web excepcionales. Mi enfoque combina diseño elegante con código de alta calidad.</span>
                         </p>
-                        <p class="text-lg text-gray-400 leading-relaxed">
+                        <p class="text-lg text-gray-400 leading-relaxed" data-i18n-about="description2">
                             Me apasiona transformar ideas complejas en interfaces intuitivas y funcionales, siempre priorizando la experiencia del usuario y el rendimiento. Busco formar parte de un equipo donde pueda aportar mi experiencia y seguir creciendo profesionalmente.
                         </p>
                     </div>
@@ -51,11 +51,11 @@ const skills = [
 
             <!-- Skills Section -->
             <div class="mb-12">
-                <h3 class="text-3xl font-bold text-white mb-8 text-center">Habilidades Técnicas</h3>
+                <h3 class="text-3xl font-bold text-white mb-8 text-center" data-i18n-about="skillsTitle">Habilidades Técnicas</h3>
                 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {skills.map((skill, index) => (
                         <div 
-                            class="group relative p-6 bg-gray-800/40 backdrop-blur-sm border border-gray-700/50 rounded-xl hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2"
+                            class="group relative p-6 bg-gray-800/40 backdrop-blur-sm border border-gray-700/50 rounded-xl hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 active:translate-y-0 card-hover"
                             style={`animation-delay: ${index * 0.1}s;`}
                         >
                             <!-- Glow effect on hover -->
@@ -98,7 +98,7 @@ const skills = [
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"></path>
                     </svg>
-                    <span>Descargar CV</span>
+                    <span data-i18n-about="downloadCV">Descargar CV</span>
                     <svg class="w-5 h-5 transform group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                     </svg>

@@ -6,26 +6,31 @@ const navItems = [
         title: "Inicio",
         url: "#home",
         icon: HomeIcon,
+        key: "home",
     },
     {
         title: "Sobre mí",
         url: "#about",
         icon: UserIcon,
+        key: "about",
     },
     {
         title: "Educación",
         url: "#education",
         icon: AcademicCapIcon,
+        key: "education",
     },
     {
         title: "Experiencia",
         url: "#experience",
         icon: BriefcaseIcon,
+        key: "experience",
     },
     {
         title: "Proyectos",
         url: "#projects",
         icon: RocketIcon,
+        key: "projects",
     },
 ];
 ---
@@ -66,31 +71,33 @@ const navItems = [
 
             <!-- Desktop Navigation -->
             <div class="hidden lg:flex items-center gap-1">
-                {navItems.map(({ title, url, icon: Icon }) => (
+                {navItems.map(({ title, url, icon: Icon, key }) => (
                     <a 
                         href={url} 
-                        class="nav-link group relative px-4 py-2 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-900" 
+                        class="nav-link group relative px-4 py-2 rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-900" 
                         data-scroll
                         data-section={url.replace('#', '')}
                         aria-label={`Ir a ${title}`}
                     >
-                        <span class="relative z-10 flex items-center gap-2 text-sm font-medium text-gray-300 group-hover:text-white transition-colors">
-                            <span class="opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="relative z-10 flex items-center gap-2 text-sm font-medium text-gray-300 group-hover:text-white transition-colors duration-300">
+                            <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110">
                                 <Icon />
                             </span>
-                            <span>{title}</span>
+                            <span class="transform group-hover:translate-x-0.5 transition-transform duration-300" data-i18n-nav={key}>{title}</span>
                         </span>
-                        <div class="absolute inset-0 bg-primary/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="absolute inset-0 bg-primary/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-b-lg opacity-0 transition-opacity duration-300 active-section-indicator"></div>
                     </a>
                 ))}
                 <a 
                     href="#contact" 
-                    class="ml-2 px-6 py-2.5 bg-primary text-white rounded-lg font-semibold text-sm hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-900" 
+                    class="ml-2 relative px-6 py-2.5 bg-primary text-white rounded-lg font-semibold text-sm hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 hover:scale-105 active:scale-95 click-scale btn-ripple focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-900 overflow-hidden" 
                     data-scroll
                     aria-label="Ir a la sección de contacto"
                 >
-                    Contacto
+                    <!-- Shine effect -->
+                    <div class="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                    <span class="relative z-10" data-i18n-nav="contact">Contacto</span>
                 </a>
             </div>
 
@@ -117,14 +124,14 @@ const navItems = [
             class="lg:hidden hidden fixed inset-x-4 top-20 bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl backdrop-blur-xl"
         >
             <div class="px-4 py-6 space-y-2">
-                {navItems.map(({ title, url, icon: Icon }) => (
+                {navItems.map(({ title, url, icon: Icon, key }) => (
                     <a
                         href={url}
                         class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-all"
                         data-scroll
                     >
                         <Icon />
-                        <span class="font-medium">{title}</span>
+                        <span class="font-medium" data-i18n-nav={key}>{title}</span>
                     </a>
                 ))}
                 <a
@@ -132,7 +139,7 @@ const navItems = [
                     class="flex items-center justify-center gap-2 mt-4 px-4 py-3 bg-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all"
                     data-scroll
                 >
-                    Contacto
+                    <span data-i18n-nav="contact">Contacto</span>
                 </a>
             </div>
         </div>
@@ -220,6 +227,45 @@ const navItems = [
             closeIcon?.classList.add("hidden");
         });
     });
+    
+    // Update translations when language changes
+    function updateHeaderTranslations() {
+        const lang = localStorage.getItem('language') || 'es';
+        const translations = {
+            es: {
+                home: 'Inicio',
+                about: 'Sobre mí',
+                education: 'Educación',
+                experience: 'Experiencia',
+                projects: 'Proyectos',
+                contact: 'Contacto',
+            },
+            en: {
+                home: 'Home',
+                about: 'About',
+                education: 'Education',
+                experience: 'Experience',
+                projects: 'Projects',
+                contact: 'Contact',
+            }
+        };
+        
+        const t = translations[lang as 'es' | 'en'] || translations.es;
+        
+        // Update navigation items
+        document.querySelectorAll('[data-i18n-nav]').forEach((el) => {
+            const key = el.getAttribute('data-i18n-nav');
+            if (key && t[key as keyof typeof t]) {
+                el.textContent = t[key as keyof typeof t];
+            }
+        });
+    }
+    
+    // Listen for language changes
+    window.addEventListener('languagechange', updateHeaderTranslations);
+    
+    // Update on load
+    updateHeaderTranslations();
 </script>
 
 <style>

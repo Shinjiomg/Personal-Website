@@ -7,6 +7,7 @@ const items = [
         value: 3,
         suffix: "+",
         description: "Años de experiencia",
+        descriptionKey: "stats.years",
         icon: BriefcaseIcon,
         color: "from-blue-500 to-cyan-500",
     },
@@ -15,6 +16,7 @@ const items = [
         value: 15,
         suffix: "+",
         description: "Proyectos completados",
+        descriptionKey: "stats.projects",
         icon: RocketIcon,
         color: "from-primary to-blue-600",
     },
@@ -23,6 +25,7 @@ const items = [
         value: 100,
         suffix: "%",
         description: "Clientes satisfechos",
+        descriptionKey: "stats.satisfaction",
         icon: StarIcon,
         color: "from-yellow-500 to-orange-500",
     },
@@ -54,7 +57,7 @@ const techStack = ["Angular", "TypeScript", "Astro", "Tailwind CSS", "Node.js"];
                     </div>
                     
                     <!-- Text -->
-                    <span class="text-sm font-bold text-white tracking-wide whitespace-nowrap">
+                    <span class="text-sm font-bold text-white tracking-wide whitespace-nowrap" data-i18n-hero="available">
                         Disponible para trabajar
                     </span>
                     
@@ -68,16 +71,16 @@ const techStack = ["Angular", "TypeScript", "Astro", "Tailwind CSS", "Node.js"];
             <!-- Main heading -->
             <div class="mb-6">
                 <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4">
-                    <span class="block text-white mb-2">Hola, soy</span>
-                    <span class="block text-primary">
+                    <span class="block text-white mb-2" data-i18n-hero="greeting">Hola, soy</span>
+                    <span class="block text-primary" data-i18n-hero="name">
                         Jhonatan Becerra
                     </span>
                 </h1>
                 <div class="mt-4">
                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-300 inline-block">
-                        Desarrollador
+                        <span data-i18n-hero="role">Desarrollador</span>
                         <span class="relative ml-3 text-primary">
-                            Frontend
+                            <span data-i18n-hero="roleHighlight">Frontend</span>
                             <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-primary"></span>
                         </span>
                     </h2>
@@ -86,9 +89,9 @@ const techStack = ["Angular", "TypeScript", "Astro", "Tailwind CSS", "Node.js"];
 
             <!-- Description -->
             <p class="mt-6 text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                Especializado en crear
-                <span class="text-primary font-semibold">experiencias digitales excepcionales</span>
-                que combinan diseño elegante con código de alta calidad.
+                <span data-i18n-hero="description">Especializado en crear</span>
+                <span class="text-primary font-semibold" data-i18n-hero="descriptionHighlight">experiencias digitales excepcionales</span>
+                <span data-i18n-hero="descriptionRest"> que combinan diseño elegante con código de alta calidad.</span>
             </p>
 
             <!-- Tech stack pills -->
@@ -105,11 +108,13 @@ const techStack = ["Angular", "TypeScript", "Astro", "Tailwind CSS", "Node.js"];
                 <a
                     href="#experience"
                     data-scroll
-                    class="group relative px-8 py-4 bg-primary text-white rounded-xl font-semibold overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 hover:scale-105"
+                    class="group relative px-8 py-4 bg-primary text-white rounded-xl font-semibold overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 hover:scale-105 active:scale-95 click-scale btn-ripple"
                 >
+                    <!-- Shine effect on hover -->
+                    <div class="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                     <span class="relative z-10 flex items-center justify-center gap-2">
-                        Ver mi experiencia
-                        <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span data-i18n-hero="ctaExperience">Ver mi experiencia</span>
+                        <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                         </svg>
                     </span>
@@ -117,11 +122,11 @@ const techStack = ["Angular", "TypeScript", "Astro", "Tailwind CSS", "Node.js"];
                 <a
                     href="#projects"
                     data-scroll
-                    class="group px-8 py-4 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 text-white rounded-xl font-semibold hover:border-primary/50 hover:bg-gray-800 transition-all duration-300"
+                    class="group relative px-8 py-4 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 text-white rounded-xl font-semibold hover:border-primary/50 hover:bg-gray-800 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 hover:scale-105 active:scale-95 click-scale"
                 >
-                    <span class="flex items-center justify-center gap-2">
-                        Ver proyectos
-                        <svg class="w-5 h-5 transform group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                        <span data-i18n-hero="ctaProjects">Ver proyectos</span>
+                        <svg class="w-5 h-5 transform group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </span>
@@ -134,7 +139,7 @@ const techStack = ["Angular", "TypeScript", "Astro", "Tailwind CSS", "Node.js"];
                     const IconComponent = item.icon;
                     return (
                         <div 
-                            class="group relative p-4 bg-gray-800/40 backdrop-blur-sm border border-gray-700/40 rounded-xl hover:border-primary/60 transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-primary/10"
+                            class="group relative p-4 bg-gray-800/40 backdrop-blur-sm border border-gray-700/40 rounded-xl hover:border-primary/60 transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-primary/10 active:scale-100 card-hover"
                             style={`animation-delay: ${index * 0.1}s;`}
                         >
                             <!-- Gradient background on hover -->
@@ -152,7 +157,7 @@ const techStack = ["Angular", "TypeScript", "Astro", "Tailwind CSS", "Node.js"];
                                     <div class={`text-3xl md:text-4xl font-bold bg-gradient-to-r ${item.color} bg-clip-text text-transparent mb-0.5 group-hover:scale-105 transition-transform duration-300`}>
                                         <span class="counter-value" data-target={item.value} data-suffix={item.suffix}>0{item.suffix}</span>
                                     </div>
-                                    <div class="text-gray-400 text-xs font-medium uppercase tracking-wide">
+                                    <div class="text-gray-400 text-xs font-medium uppercase tracking-wide" data-i18n={`hero.${item.descriptionKey}`}>
                                         {item.description}
                                     </div>
                                 </div>
@@ -170,7 +175,7 @@ const techStack = ["Angular", "TypeScript", "Astro", "Tailwind CSS", "Node.js"];
     <!-- Scroll indicator -->
     <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 group cursor-pointer" id="scroll-indicator">
         <div class="flex flex-col items-center gap-2 animate-bounce">
-            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Desplázate</span>
+            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider" data-i18n-hero="scroll">Desplázate</span>
             <div class="relative">
                 <div class="absolute inset-0 bg-primary/20 rounded-full blur-md opacity-50"></div>
                 <svg class="w-6 h-6 text-primary relative z-10 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
