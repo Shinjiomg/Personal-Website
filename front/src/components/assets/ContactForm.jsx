@@ -6,8 +6,50 @@ export default function ContactForm() {
     let formRef;
     const [isSending, setIsSending] = createSignal(false);
     const [formValid, setFormValid] = createSignal(false);
+    const [errors, setErrors] = createSignal({});
+    const [touched, setTouched] = createSignal({});
 
+    const validateField = (name, value) => {
+        const newErrors = { ...errors() };
+        
+        switch (name) {
+            case 'name':
+                if (!value.trim()) {
+                    newErrors.name = 'El nombre es requerido';
+                } else if (value.trim().length < 2) {
+                    newErrors.name = 'El nombre debe tener al menos 2 caracteres';
+                } else {
+                    delete newErrors.name;
+                }
+                break;
+            case 'email':
+                if (!value.trim()) {
+                    newErrors.email = 'El correo electrónico es requerido';
+                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                    newErrors.email = 'Ingresa un correo electrónico válido';
+                } else {
+                    delete newErrors.email;
+                }
+                break;
+            case 'message':
+                if (!value.trim()) {
+                    newErrors.message = 'El mensaje es requerido';
+                } else if (value.trim().length < 10) {
+                    newErrors.message = 'El mensaje debe tener al menos 10 caracteres';
+                } else {
+                    delete newErrors.message;
+                }
+                break;
+        }
+        
+        setErrors(newErrors);
+        setFormValid(formRef.checkValidity() && Object.keys(newErrors).length === 0);
+    };
 
+    const handleBlur = (name, value) => {
+        setTouched({ ...touched(), [name]: true });
+        validateField(name, value);
+    };
 
     const sendEmail = async (event) => {
         event.preventDefault();
@@ -38,6 +80,8 @@ export default function ContactForm() {
             await promise;
             formRef.reset();
             setFormValid(false);
+            setErrors({});
+            setTouched({});
         } catch (error) {
             console.error('Error al enviar el correo:', error);
         } finally {
@@ -45,8 +89,11 @@ export default function ContactForm() {
         }
     };
 
-    const handleInputChange = () => {
-        setFormValid(formRef.checkValidity());
+    const handleInputChange = (name, value) => {
+        if (touched()[name]) {
+            validateField(name, value);
+        }
+        setFormValid(formRef.checkValidity() && Object.keys(errors()).length === 0);
     };
 
     return (
@@ -77,10 +124,22 @@ export default function ContactForm() {
                         id="name"
                         name="name"
                         placeholder="Tu nombre"
-                        class="w-full px-4 py-3 bg-gray-900/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
+                        class={`w-full px-4 py-3 bg-gray-900/50 border rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary transition-all duration-300 ${
+                            touched().name && errors().name 
+                                ? 'border-red-500 focus:border-red-500' 
+                                : 'border-gray-700/50 focus:border-primary'
+                        }`}
                         required
-                        onInput={handleInputChange}
+                        onInput={(e) => handleInputChange('name', e.target.value)}
+                        onBlur={(e) => handleBlur('name', e.target.value)}
+                        aria-invalid={touched().name && errors().name ? 'true' : 'false'}
+                        aria-describedby={touched().name && errors().name ? 'name-error' : undefined}
                     />
+                    {touched().name && errors().name && (
+                        <p id="name-error" class="mt-1 text-sm text-red-400" role="alert">
+                            {errors().name}
+                        </p>
+                    )}
                 </div>
                 
                 <div>
@@ -95,10 +154,22 @@ export default function ContactForm() {
                         id="email"
                         name="email"
                         placeholder="tu@email.com"
-                        class="w-full px-4 py-3 bg-gray-900/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
+                        class={`w-full px-4 py-3 bg-gray-900/50 border rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary transition-all duration-300 ${
+                            touched().email && errors().email 
+                                ? 'border-red-500 focus:border-red-500' 
+                                : 'border-gray-700/50 focus:border-primary'
+                        }`}
                         required
-                        onInput={handleInputChange}
+                        onInput={(e) => handleInputChange('email', e.target.value)}
+                        onBlur={(e) => handleBlur('email', e.target.value)}
+                        aria-invalid={touched().email && errors().email ? 'true' : 'false'}
+                        aria-describedby={touched().email && errors().email ? 'email-error' : undefined}
                     />
+                    {touched().email && errors().email && (
+                        <p id="email-error" class="mt-1 text-sm text-red-400" role="alert">
+                            {errors().email}
+                        </p>
+                    )}
                 </div>
                 
                 <div>
@@ -113,21 +184,34 @@ export default function ContactForm() {
                         name="message"
                         rows="5"
                         placeholder="Cuéntame sobre tu oportunidad laboral..."
-                        class="w-full px-4 py-3 bg-gray-900/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 resize-none"
+                        class={`w-full px-4 py-3 bg-gray-900/50 border rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary transition-all duration-300 resize-none ${
+                            touched().message && errors().message 
+                                ? 'border-red-500 focus:border-red-500' 
+                                : 'border-gray-700/50 focus:border-primary'
+                        }`}
                         required
-                        onInput={handleInputChange}
+                        onInput={(e) => handleInputChange('message', e.target.value)}
+                        onBlur={(e) => handleBlur('message', e.target.value)}
+                        aria-invalid={touched().message && errors().message ? 'true' : 'false'}
+                        aria-describedby={touched().message && errors().message ? 'message-error' : undefined}
                     ></textarea>
+                    {touched().message && errors().message && (
+                        <p id="message-error" class="mt-1 text-sm text-red-400" role="alert">
+                            {errors().message}
+                        </p>
+                    )}
                 </div>
             </div>
 
             <button
                 type="submit"
-                class={`w-full group relative px-8 py-4 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 ${
+                class={`w-full group relative px-8 py-4 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-800 ${
                     isSending() || !formValid()
                         ? 'opacity-50 cursor-not-allowed'
                         : 'hover:shadow-lg hover:shadow-primary/30 hover:scale-105'
                 }`}
                 disabled={isSending() || !formValid()}
+                aria-busy={isSending()}
             >
                 <div class="absolute inset-0 bg-primary"></div>
                 <span class="relative z-10 flex items-center justify-center gap-2">
