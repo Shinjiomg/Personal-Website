@@ -1,90 +1,180 @@
 ---
+import { HomeIcon, UserIcon, AcademicCapIcon, BriefcaseIcon, RocketIcon } from "./assets/Icons";
+
 const navItems = [
     {
         title: "Inicio",
         url: "#home",
+        icon: HomeIcon,
     },
     {
         title: "Sobre mí",
         url: "#about",
+        icon: UserIcon,
     },
     {
         title: "Educación",
         url: "#education",
+        icon: AcademicCapIcon,
     },
     {
         title: "Experiencia",
         url: "#experience",
+        icon: BriefcaseIcon,
     },
     {
         title: "Proyectos",
         url: "#projects",
+        icon: RocketIcon,
     },
 ];
 ---
 
 <header
-    class="absolute z-50 w-full transition-all duration-300 bg-transparent py-4"
+    class="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500"
     id="header"
 >
-    <nav class="flex items-center justify-between max-w-7xl mx-auto px-2">
-        <div class="flex lg:flex-1">
-            <a href="#home" class="flex items-center space-x-2" data-scroll>
-                <div class="relative w-8 h-8">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-r from-gradient-start to-gradient-end rounded-full"
-                    >
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 lg:h-20">
+            <!-- Logo -->
+            <a 
+                href="#home" 
+                class="flex items-center space-x-3 group" 
+                data-scroll
+            >
+                <div class="relative w-10 h-10 lg:w-12 lg:h-12">
+                    <div class="absolute inset-0 bg-primary rounded-xl blur-sm opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative w-full h-full bg-primary rounded-xl p-0.5">
+                        <div class="w-full h-full bg-gray-900 rounded-lg flex items-center justify-center">
+                            <img
+                                src="/favicon.png"
+                                alt="Logo"
+                                class="w-6 h-6 lg:w-8 lg:h-8"
+                            />
+                        </div>
                     </div>
-                    <img
-                        src="/favicon.png"
-                        alt="Logo"
-                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2    "
-                    />
                 </div>
-                <span
-                    class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gradient-start to-gradient-end animate-gradient"
-                >
+                <span class="text-lg lg:text-xl font-bold text-primary group-hover:text-primary/80 transition-colors">
                     Jhonatan Becerra
                 </span>
             </a>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden lg:flex items-center gap-1">
+                {navItems.map(({ title, url, icon: Icon }) => (
+                    <a 
+                        href={url} 
+                        class="group relative px-4 py-2 rounded-lg transition-all duration-300" 
+                        data-scroll
+                    >
+                        <span class="relative z-10 flex items-center gap-2 text-sm font-medium text-gray-300 group-hover:text-white transition-colors">
+                            <span class="opacity-0 group-hover:opacity-100 transition-opacity">
+                                <Icon />
+                            </span>
+                            <span>{title}</span>
+                        </span>
+                        <div class="absolute inset-0 bg-primary/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </a>
+                ))}
+                <a 
+                    href="#contact" 
+                    class="ml-2 px-6 py-2.5 bg-primary text-white rounded-lg font-semibold text-sm hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 hover:scale-105" 
+                    data-scroll
+                >
+                    Contacto
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button
+                id="mobile-menu-button"
+                class="lg:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-colors"
+                aria-label="Toggle menu"
+            >
+                <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
         </div>
 
-        <div class="flex lg:gap-x-8">
-            {
-                navItems.map(({ title, url }) => (
-                    <a href={url} class="relative px-4 py-2 hidden md:block" data-scroll>
-                        <span
-                            class="relative z-10 text-sm font-medium text-gray-100 transition-colors hover:text-accent"
-                            
-                        >
-                            {title}
-                        </span>
+        <!-- Mobile Menu -->
+        <div
+            id="mobile-menu"
+            class="lg:hidden hidden fixed inset-x-4 top-20 bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl backdrop-blur-xl"
+        >
+            <div class="px-4 py-6 space-y-2">
+                {navItems.map(({ title, url, icon: Icon }) => (
+                    <a
+                        href={url}
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-all"
+                        data-scroll
+                    >
+                        <Icon />
+                        <span class="font-medium">{title}</span>
                     </a>
-                ))
-            }
-            <a href="#contact" class="relative px-4 py-2" data-scroll>
-                <span
-                    class="relative z-10 py-3 px-6 text-sm font-medium text-gray-100 transition-colors hover:bg-accent/10 hover:text-accent border border-accent rounded-full"
-                    >Contacto</span
+                ))}
+                <a
+                    href="#contact"
+                    class="flex items-center justify-center gap-2 mt-4 px-4 py-3 bg-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all"
+                    data-scroll
                 >
-            </a>
+                    Contacto
+                </a>
+            </div>
         </div>
     </nav>
 </header>
 
 <script>
     const header = document.getElementById("header");
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const menuIcon = document.getElementById("menu-icon");
+    const closeIcon = document.getElementById("close-icon");
+
+    // Header scroll effect
     window.addEventListener("scroll", () => {
-        if (window.scrollY > 0) {
-            header?.classList.remove("absolute", "bg-transparent");
-            header?.classList.add("fixed", "bg-primary/15", "backdrop-blur-lg");
+        if (window.scrollY > 50) {
+            header?.classList.add("bg-gray-900/80", "backdrop-blur-xl", "border-b", "border-gray-800/50");
+            header?.classList.remove("bg-transparent");
         } else {
-            header?.classList.remove(
-                "fixed",
-                "bg-primary/15",
-                "backdrop-blur-lg",
-            );
-            header?.classList.add("absolute", "bg-transparent");
+            header?.classList.remove("bg-gray-900/80", "backdrop-blur-xl", "border-b", "border-gray-800/50");
+            header?.classList.add("bg-transparent");
         }
     });
+
+    // Mobile menu toggle
+    mobileMenuButton?.addEventListener("click", () => {
+        const isHidden = mobileMenu?.classList.contains("hidden");
+        
+        if (isHidden) {
+            mobileMenu?.classList.remove("hidden");
+            menuIcon?.classList.add("hidden");
+            closeIcon?.classList.remove("hidden");
+        } else {
+            mobileMenu?.classList.add("hidden");
+            menuIcon?.classList.remove("hidden");
+            closeIcon?.classList.add("hidden");
+        }
+    });
+
+    // Close mobile menu when clicking a link
+    const mobileLinks = mobileMenu?.querySelectorAll("a");
+    mobileLinks?.forEach((link) => {
+        link.addEventListener("click", () => {
+            mobileMenu?.classList.add("hidden");
+            menuIcon?.classList.remove("hidden");
+            closeIcon?.classList.add("hidden");
+        });
+    });
 </script>
+
+<style>
+    /* Smooth scroll behavior */
+    html {
+        scroll-behavior: smooth;
+    }
+</style>

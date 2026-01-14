@@ -1,156 +1,163 @@
 ---
 const experiences = [
     {
-        title: "Desarrollador Web | Técnico SEO",
-        company: "Janover",
-        period: "2025 - Actualidad",
+        title: "Desarrollador Web | SEO Técnico",
+        company: "Janover Ventures",
+        period: "Ene 2025 - Ene 2026",
         description:
-            "Optimización técnica y desarrollo web enfocado en rendimiento, indexación y visibilidad en buscadores.",
+            "Desarrollo y mantenimiento de componentes web reutilizables utilizando Vue y Nuxt.js. Implementación de interfaces en Astro conectadas a CMS (Hygraph), con énfasis en escalabilidad, accesibilidad y rendimiento.",
         achievements: [
-            "Implementación de diseños responsive",
-            "Optimización de rendimiento web",
-            "Desarrollo y manejo del SEO de los sitios web de la empresa",
+            "Rediseño y mantenimiento de landing pages con enfoque en experiencia de usuario y objetivos de conversión",
+            "Ejecución de pruebas A/B para validar hipótesis de diseño y contenido junto al equipo de producto",
+            "Aplicación de técnicas de SEO técnico (robots.txt, sitemaps, metadatos personalizados)",
+            "Contribución clave en la evolución visual y técnica del sitio, liderando rediseños y pruebas A/B",
         ],
-        technologies: ["Astro", "SEO", "JavaScript", "TailwindCSS"],
+        technologies: ["Vue.js", "Nuxt.js", "Astro", "Hygraph", "SEO Técnico", "TailwindCSS"],
     },
     {
-        title: "Desarrollador Frontend",
+        title: "Desarrollador Frontend Angular",
         company: "DataScoring",
-        period: "2025 - Actualidad",
+        period: "Ene 2025 - Actualidad",
         description:
-            "Desarrollo y mantenimiento de interfaces de usuario para la plataforma de DataScoring.",
+            "Migración progresiva de una plataforma a Angular, optimizando componentes y flujos de navegación. Implementación de componentes reutilizables y mejoras de rendimiento.",
         achievements: [
-            "Desarrollo de componentes reutilizables",
-            "Optimización de rendimiento web",
-            "Implementación de diseño responsive",
+            "Aporté más del 90% en la migración de la plataforma principal a Angular",
+            "Mejora de la velocidad de carga y experiencia de usuario",
+            "Reducción del tiempo de mantenimiento mediante componentes reutilizables",
+            "Consumo de APIs RESTful y aplicación de buenas prácticas de accesibilidad",
         ],
-        technologies: ["Angular", "TypeScript", "SASS", "Git"],
+        technologies: ["Angular", "TypeScript", "SASS", "Git", "RESTful APIs"],
+    },
+    {
+        title: "Desarrollador Web Angular",
+        company: "VMO Central SAS",
+        period: "May 2023 - Feb 2024",
+        description:
+            "Desarrollo y mantenimiento de aplicaciones web utilizando Angular, TypeScript y SASS. Implementación de componentes reutilizables y optimización de rendimiento.",
+        achievements: [
+            "Mejoré el rendimiento de las aplicaciones en un 20% mediante optimización de código y recursos",
+            "Desarrollo de componentes reutilizables y optimización de rendimiento",
+            "Integración de APIs RESTful y servicios web",
+            "Diseño de interfaces responsivas y accesibles",
+        ],
+        technologies: ["Angular", "TypeScript", "SASS", "Git", "RESTful APIs"],
     },
     {
         title: "Desarrollador Web",
-        company: "Freelance",
-        period: "2024 - 2025",
+        company: "Freelancer",
+        period: "Feb 2022 - Jun 2024",
         description:
-            "Desarrollo de aplicaciones web escalables usando Astro y Solid.js. Liderazgo técnico de un equipo de 3 desarrolladores.",
+            "Creación de sitios web personalizados con HTML, CSS, PHP, React y Vue.js. Desarrollo de videojuegos 2D utilizando Unity y GameMaker Studio 2.",
         achievements: [
-            "Desarrollo de proyectos exitosos",
-            "Optimización de rendimiento web",
-            "Implementación de diseños responsive",
+            "Desarrollé 5 proyectos web exitosos con altas tasas de satisfacción del cliente",
+            "Colaboración directa con clientes para definir requisitos y objetivos de cada proyecto",
+            "Desarrollo de videojuegos 2D utilizando Unity y GameMaker Studio 2",
         ],
-        technologies: ["Astro", "Solid.js", "JavaScript", "TailwindCSS"],
+        technologies: ["React", "Vue.js", "HTML", "CSS", "PHP", "Unity"],
     },
     {
-        title: "Desarrollador Frontend",
-        company: "VMO Central SAS",
-        period: "2023 - 2024",
-        description:
-            "Desarrollo y mantenimiento de interfaces de usuario para CRM de Visita Médica. Desarrollo de componentes reutilizables y optimización de rendimiento.",
-        achievements: [
-            "Desarrollo de componentes reutilizables",
-            "Optimización de rendimiento web",
-            "Creación de aplicativos web a la medida",
-        ],
-        technologies: ["Angular", "TypeScript", "SASS", "Git"],
-    },
-    {
-        title: "Desarrollador Mobile IONIC",
+        title: "Desarrollador Móvil IONIC",
         company: "Universidad Nacional",
-        period: "2021 - 2022",
+        period: "Ago 2020 - May 2022",
         description:
-            "Desarrollo de un proyecto de salud como proyecto de grado.",
+            "Coautor de la aplicación móvil 'PeriOpera' para mejorar la salud en zonas rurales. Diseño y desarrollo de interfaces intuitivas y usables.",
         achievements: [
-            "Co-autor del aplicativo móvil de salud para zonas rurales 'PeriOpera'",
-            "Implementación de funciones avanzadas",
-            "Desarrollo de componentes reutilizables, interafaces de usuario y menús",
+            "Contribuí al lanzamiento exitoso de una aplicación que impactó positivamente en comunidades rurales",
+            "Diseño y desarrollo de interfaces intuitivas y usables",
+            "Desarrollo de componentes reutilizables, interfaces de usuario y menús",
         ],
         technologies: ["IONIC", "TypeScript", "CSS3", "Git"],
     },
 ];
 ---
 
-<section id="experience" class="py-20 min-h-screen flex items-center justify-center bg-gray-900">
-    <div
-        class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(99,102,241,0.1),transparent_50%)]"
-    >
-    </div>
-    <div class="max-w-7xl mx-auto px-8">
+<section id="experience" class="relative py-20 min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Background effects -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.08),transparent_50%)]"></div>
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <!-- Section header -->
         <div class="text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4">
-                Experiencia Profesional
+            <span class="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
+                Trayectoria
+            </span>
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
+                <span class="text-white">Experiencia</span>
+                <span class="block text-primary">
+                    Profesional
+                </span>
             </h2>
-            <p class="text-lg text-gray-300 max-w-2xl mx-auto">
-                Mi trayectoria profesional en el desarrollo frontend y
-                tecnologías web.
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                Un recorrido por mi evolución como desarrollador frontend
             </p>
         </div>
 
-        <div class="relative">
-            <div
-                class="absolute left-1/2 transform -translate-x-px h-full w-0.5 bg-gradient-to-b from-gradient-start to-gradient-end"
-            >
-            </div>
-
-            <div class="space-y-12">
-                {
-                    experiences.map((exp, index) => (
-                        <div
-                            class={`relative ${index % 2 === 0 ? "lg:ml-auto lg:pl-16" : "lg:mr-auto lg:pr-16"} lg:w-1/2`}
-                        >
-                            <div class="bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                                <div class="absolute top-6 lg:top-8 -left-3 lg:left-0 lg:-translate-x-full lg:pr-8 flex items-center justify-center">
-                                    <div class="w-6 h-6 rounded-full bg-gradient-to-r from-gradient-start to-gradient-end" />
+        <!-- Experience Cards -->
+        <div class="space-y-6">
+            {experiences.map((exp, index) => (
+                <div 
+                    class="group relative"
+                    style={`animation-delay: ${index * 0.1}s;`}
+                >
+                    <!-- Glow effect -->
+                    <div class="absolute -inset-1 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    
+                    <!-- Card -->
+                    <div class="relative bg-gray-800/40 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 lg:p-8 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1">
+                        <div class="flex flex-col lg:flex-row lg:items-start gap-6">
+                            <!-- Left: Period and Company -->
+                            <div class="flex-shrink-0 lg:w-48">
+                                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/30 mb-3">
+                                    <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span class="text-xs font-semibold text-primary">{exp.period}</span>
                                 </div>
-
-                                <span class="inline-block px-4 py-2 rounded-full text-sm font-medium bg-primary/10 text-accent mb-4">
-                                    {exp.period}
-                                </span>
-
-                                <h3 class="text-xl font-bold text-white mb-2">
-                                    {exp.title}
-                                </h3>
-                                <h4 class="text-lg font-semibold text-primary mb-4">
+                                <h4 class="text-lg font-bold text-primary mb-1 group-hover:text-white transition-colors">
                                     {exp.company}
                                 </h4>
+                            </div>
 
-                                <p class="text-gray-300 mb-4">
+                            <!-- Right: Content -->
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-primary transition-colors">
+                                    {exp.title}
+                                </h3>
+                                
+                                <p class="text-gray-300 mb-5 leading-relaxed">
                                     {exp.description}
                                 </p>
 
-                                <ul class="space-y-2 mb-4">
-                                    {exp.achievements.map((achievement) => (
-                                        <li class="flex items-start">
-                                            <svg
-                                                class="w-5 h-5 text-primary mt-1 mr-2"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M5 13l4 4L19 7"
-                                                />
-                                            </svg>
-                                            <span class="text-gray-300">
-                                                {achievement}
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <!-- Achievements -->
+                                <div class="mb-5">
+                                    <ul class="space-y-2.5">
+                                        {exp.achievements.map((achievement) => (
+                                            <li class="flex items-start gap-3">
+                                                <div class="mt-1.5 flex-shrink-0">
+                                                    <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                </div>
+                                                <span class="text-gray-300 leading-relaxed text-sm">{achievement}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
 
+                                <!-- Technologies -->
                                 <div class="flex flex-wrap gap-2">
                                     {exp.technologies.map((tech) => (
-                                        <span class="px-3 py-1 bg-gray-700 text-gray-200 rounded-full text-sm">
+                                        <span class="px-3 py-1.5 bg-gray-700/50 border border-gray-600/50 text-gray-300 rounded-lg text-xs font-medium hover:border-primary/50 hover:text-primary hover:bg-primary/10 transition-all duration-300">
                                             {tech}
                                         </span>
                                     ))}
                                 </div>
                             </div>
                         </div>
-                    ))
-                }
-            </div>
+                    </div>
+                </div>
+            ))}
         </div>
     </div>
 </section>

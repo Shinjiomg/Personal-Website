@@ -3,13 +3,14 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { Toaster } from "solid-toast";
 import Analytics from "@vercel/analytics/astro";
+import "../assets/styles/globals.css";
 
 interface Props {
 	title: string;
 	description?: string;
 }
 
-const { title, description = "Portafolio profesional de Desarrollo Frontend" } =
+const { title, description = "Portafolio profesional de Jhonatan Becerra | Desarrollador Frontend especializado en Angular, TypeScript, Astro y tecnologías web modernas" } =
 	Astro.props;
 ---
 
@@ -18,32 +19,26 @@ const { title, description = "Portafolio profesional de Desarrollo Frontend" } =
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="theme-color" content="#6366f1" />
 		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
 			href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
 			rel="stylesheet"
 		/>
 		<title>{title}</title>
 	</head>
-	<Header />
-	<body>
-		<slot />
+	<body class="bg-gray-900 text-gray-100">
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
 		<Analytics />
 		<Toaster position="bottom-right" client:load />
 		<script src="../../node_modules/preline/dist/preline"></script>
 	</body>
-	<Footer />
-
-	<style>
-		html,
-		body {
-			margin: 0;
-			width: 100%;
-			height: 100%;
-		}
-	</style>
-
-
 </html>
