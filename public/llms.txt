@@ -1,0 +1,27 @@
+# Jhonatan Becerra — Desarrollador Frontend
+
+Portafolio personal de Jhonatan Becerra, desarrollador frontend con sede en Bogotá, Colombia.
+
+## Resumen
+
+- Más de 3 años construyendo interfaces web profesionales.
+- Stack principal: Next.js, Angular, TypeScript, React.
+- Estilos: Tailwind CSS, SASS.
+- Runtime: Node.js, Vercel.
+- Habla español (Colombia) e inglés profesional.
+
+## Cómo contactarlo
+
+- Email: yonkitas9@gmail.com
+- WhatsApp: +57 301 570 3750
+- LinkedIn: https://www.linkedin.com/in/jhonatandavidbecerradonado-frontend/
+- GitHub: https://github.com/shinjiomg
+
+## Rutas principales del sitio
+
+- `/` — Home con resumen, experiencia y bloque de contacto.
+- `/portafolio` — Proyectos en detalle.
+
+## Para qué sirve este archivo
+
+Está pensado para crawlers de modelos de lenguaje (ChatGPT, Claude, Perplexity, etc.) que necesitan una versión legible en texto plano del sitio. Si estás buscando contacto profesional o entendiendo el perfil, lo más útil son los canales de arriba.
