@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Mail } from "lucide-react";
+import { FileText, Mail } from "lucide-react";
 
 import { GitHubIcon } from "@/components/icons/GitHubIcon";
 import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
@@ -177,6 +177,17 @@ export function Footer() {
               icon={LinkedInIcon}
               label={`LinkedIn · ${siteConfig.social.linkedinHandle}`}
               external
+            />
+            {/* CV PDF · al final de la columna porque es un asset
+             *  descargable, no un canal de mensajería. Mantiene el
+             *  pattern visual (icon + label) pero el icon FileText
+             *  lo diferencia semánticamente del resto. */}
+            <ConnectItem
+              href="/cv.pdf"
+              icon={FileText}
+              label="CV · PDF · EN"
+              external
+              stroke
             />
           </ul>
         </div>

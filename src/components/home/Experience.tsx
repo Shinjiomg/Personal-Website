@@ -1,14 +1,18 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { FileText } from "lucide-react";
+import Link from "next/link";
 import { useState, type KeyboardEvent } from "react";
 
+import { buttonVariants } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { MarkerHighlight } from "@/components/ui/marker-highlight";
 import {
+  educationCertifications,
   educationDegrees,
-  educationExtra,
   type EducationEntry,
+  type EducationFootnote,
 } from "@/data/education";
 import { experience, type ExperienceJob } from "@/data/experience";
 import { cn } from "@/lib/utils";
@@ -86,6 +90,14 @@ export function Experience() {
          *  propia) porque narrativamente extiende la misma idea:
          *  primero el trabajo, después el cartón que respalda. */}
         <EducationStrip />
+
+        {/* Resume CTA — cierre de la sección con la acción de mayor
+         *  fricción reducida para reclutadores: bajar el PDF completo
+         *  sin pasar por el form. El CTA va DESPUÉS de formación
+         *  intencionalmente — quien llegó hasta acá ya leyó toda la
+         *  trayectoria y formación; este botón le da el next step
+         *  natural ("tengo todo lo que necesito ver, dame el PDF"). */}
+        <ResumeCTA />
       </div>
     </section>
   );
@@ -712,18 +724,23 @@ function parseSpanishDate(dateStr: string): number {
  *   ─── Formación (divider editorial con label centrado) ─────
  *   ┌── degree 1 ──┬── degree 2 ──┬── degree 3 ──┐
  *   │ AGO 2024 HOY │ AGO 2018 ... │ FEB 2016 ... │
- *   │ Software     │ Software     │ Software     │
- *   │ Engineer     │ Develop.     │ Programming  │
+ *   │ Ingeniería   │ Tecnólogo    │ Técnico      │
+ *   │ Software     │ Software     │ Programming  │
  *   │ IBEROAMERIC. │ U. CUNDI...  │ SENA         │
  *   └──────────────┴──────────────┴──────────────┘
- *   — Curso · IONIC Mobile Developer · U. Nacional · 2020—2022
+ *   — + Cert · UX/UI y Prototipado Digital · Udemy · 2022
+ *   — + Cert · Git y GitHub Completo De Cero · Udemy · 2022
+ *   — + Cert · Fundamentos de Programación · Udemy · 2022
  *
  * Hairlines verticales entre cells en sm+, horizontales en mobile.
  * El degree `current: true` lleva un punto lima pulsando — matchea
  * el patrón del "Ahora" en el sidebar de Experience.
  *
- * El curso (extra-curricular) va en una footnote line aparte,
- * deliberadamente más bajo en jerarquía visual que los degrees.
+ * Las certificaciones viven abajo en tipografía mono uppercase
+ * compacta — un solo pattern (FootnoteRow) los maneja a todos.
+ * Para sumar más certs (o un curso futuro) basta extender el array
+ * en `data/education.ts`. El strip se mantiene tightly scaled
+ * gracias al `gap-y-1.5` interno (no bloques separados).
  * ════════════════════════════════════════════════════════════════ */
 function EducationStrip() {
   return (
@@ -747,31 +764,59 @@ function EducationStrip() {
         ))}
       </ul>
 
-      {/* Footnote del curso extra-curricular */}
-      <div className="mt-9 flex items-start gap-3 sm:mt-10 sm:items-center">
-        <span
-          aria-hidden
-          className="mt-2 h-px w-6 shrink-0 bg-foreground/15 sm:mt-0"
-        />
-        <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1 font-mono text-[10.5px] uppercase tracking-[0.18em] text-subtle-foreground sm:text-[11px]">
-          <span className="font-bold text-foreground-strong">
-            + {educationExtra.label}
-          </span>
-          <span aria-hidden className="text-foreground/25">
-            ·
-          </span>
-          <span className="text-foreground/85">{educationExtra.degree}</span>
-          <span aria-hidden className="text-foreground/25">
-            ·
-          </span>
-          <span>{educationExtra.institution}</span>
-          <span aria-hidden className="text-foreground/25">
-            ·
-          </span>
-          <span className="tabular-nums">{educationExtra.period}</span>
-        </p>
-      </div>
+      {/* Footnotes · certificaciones Udemy.
+       *  Mismo pattern visual para todas — separadas sólo por
+       *  gap-y modesto para que se lean como cluster coherente,
+       *  no como bloques distintos. */}
+      <ul className="mt-9 flex flex-col gap-y-2 sm:mt-10 sm:gap-y-1.5">
+        {educationCertifications.map((entry, i) => (
+          <FootnoteRow
+            key={`${entry.label}-${entry.degree}-${i}`}
+            entry={entry}
+          />
+        ))}
+      </ul>
     </RevealUp>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * FootnoteRow — línea individual de curso o certificación.
+ *
+ * Pattern: hairline leading (24px) + `+ <label>` bold + sequence de
+ * chunks `<separator>·<text>` que terminan en el period tabular-nums.
+ * Mono uppercase 10.5px — deliberadamente subtle frente al display
+ * type de los degrees arriba.
+ *
+ * `items-start` en mobile (hairline alinea con la primera línea del
+ * wrap cuando el texto wrappea) y `items-center` en sm+ (donde
+ * típicamente todo entra en una sola línea).
+ * ──────────────────────────────────────────────────────────────── */
+function FootnoteRow({ entry }: { entry: EducationFootnote }) {
+  return (
+    <li className="flex items-start gap-3 sm:items-center">
+      <span
+        aria-hidden
+        className="mt-2 h-px w-6 shrink-0 bg-foreground/15 sm:mt-0"
+      />
+      <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1 font-mono text-[10.5px] uppercase tracking-[0.18em] text-subtle-foreground sm:text-[11px]">
+        <span className="font-bold text-foreground-strong">
+          + {entry.label}
+        </span>
+        <span aria-hidden className="text-foreground/25">
+          ·
+        </span>
+        <span className="text-foreground/85">{entry.degree}</span>
+        <span aria-hidden className="text-foreground/25">
+          ·
+        </span>
+        <span>{entry.institution}</span>
+        <span aria-hidden className="text-foreground/25">
+          ·
+        </span>
+        <span className="tabular-nums">{entry.period}</span>
+      </p>
+    </li>
   );
 }
 
@@ -809,5 +854,69 @@ function DegreeCell({ entry }: { entry: EducationEntry }) {
         {entry.institution}
       </p>
     </li>
+  );
+}
+
+/* ═════════════════════════════════════════════════════════════════
+ * ResumeCTA — descarga del PDF al cierre de la sección.
+ *
+ * Layout:
+ *   ───────────────────────────────────────────────────
+ *               [↓ Descargar CV completo]
+ *              PDF · ENGLISH · ACTUALIZADO 2026
+ *   ───────────────────────────────────────────────────
+ *
+ * Tratamiento:
+ *   · Hairlines top/bottom · genera "band" full-width que cierra la
+ *     sección. Mismo lenguaje que las rule-editorial usadas como
+ *     dividers en otras secciones.
+ *   · Botón ink primario (alto contraste) — la acción que queremos
+ *     que el reclutador apriete sin pensar. No competimos con el
+ *     "Hablemos" del header porque está en otra sección visual.
+ *   · Meta-text mono uppercase debajo · señaliza idioma + freshness
+ *     ANTES del click. Reclutadores valoran no descargar PDFs viejos
+ *     o en idioma equivocado por error.
+ *
+ * `download` HTML attribute fuerza la descarga (en lugar de abrir el
+ * PDF inline en una pestaña nueva). En móvil algunos browsers ignoran
+ * el attr y abren igual el PDF — comportamiento aceptable, el archivo
+ * sigue siendo descargable manualmente desde la vista del browser.
+ * ════════════════════════════════════════════════════════════════ */
+function ResumeCTA() {
+  return (
+    <RevealUp delay={0.15} className="mt-14 sm:mt-16 lg:mt-20">
+      <div className="border-y border-foreground/10 py-9 sm:py-10">
+        <div className="mx-auto flex max-w-md flex-col items-center gap-4 text-center">
+          <Link
+            href="/cv.pdf"
+            download="Jhonatan-Becerra-Resume.pdf"
+            target="_blank"
+            rel="noopener"
+            className={cn(
+              buttonVariants({ variant: "ink", size: "lg" }),
+              "min-w-[220px]",
+            )}
+          >
+            <FileText aria-hidden className="size-4" strokeWidth={2} />
+            Descargar CV completo
+          </Link>
+
+          <p
+            className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-mono text-[10.5px] uppercase tracking-[0.2em] text-subtle-foreground sm:text-[11px]"
+            aria-label="Metadata del archivo"
+          >
+            <span>PDF</span>
+            <span aria-hidden className="text-foreground/25">
+              ·
+            </span>
+            <span>English</span>
+            <span aria-hidden className="text-foreground/25">
+              ·
+            </span>
+            <span>Actualizado 2026</span>
+          </p>
+        </div>
+      </div>
+    </RevealUp>
   );
 }

@@ -20,8 +20,6 @@ import {
   useState,
   type FormEvent,
 } from "react";
-import emailjs from "@emailjs/browser";
-
 import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { buttonVariants } from "@/components/ui/button";
@@ -76,17 +74,19 @@ import { cn } from "@/lib/utils";
  *     en la col izq, eliminando el desbalance visual.
  *
  * Decisiones funcionales:
- *   · **Form como primary action** — recuperado del setup Astro
- *     con EmailJS. Mismos 3 campos (name, email, message) → la
- *     plantilla existente sigue válida sin tocar dashboard.
+ *   · **Form como primary action** — pipeline server-side con
+ *     Resend (`/api/contact` route handler). El client postea JSON,
+ *     el server valida con Zod, rate-limitea con Upstash Redis,
+ *     renderea el template React Email y dispara el send.
  *   · **Canales unificados** — Email + WhatsApp + LinkedIn en una
  *     SOLA lista editorial con mismo pattern: icon container +
  *     label/value stack + arrow.
  *   · **Sin "respondo en 24h"** — promesa fuera por decisión del
  *     user; sin chip de availability falsa.
- *   · **Public key de EmailJS en client** — by design del SDK.
- *     Mitigado por origin allowlist en dashboard (instrucciones
- *     en .env.example) y honeypot anti-bot en el form.
+ *   · **API key Resend NUNCA en cliente** — vive solo como env var
+ *     server-side (`RESEND_API_KEY` sin prefijo NEXT_PUBLIC_).
+ *     Migración desde EmailJS donde la public key vivía en cliente
+ *     y dependíamos de origin allowlist del dashboard.
  *
  * Lengua:
  *   · Español neutro, SIN voseo argentino. Imperativos en `tú`
@@ -230,36 +230,42 @@ function RevealUp({
  * ContactForm — el corazón funcional de la sección.
  *
  * Stack:
- *   · `@emailjs/browser` v4 — SDK oficial. Reusa el service/template/
- *     key del setup Astro previo (mismos campos, plantilla
- *     compatible sin tocar dashboard).
- *   · `<form ref>` con `emailjs.sendForm` — pasa el formulario
- *     completo al SDK; cada `<input name>` se mapea a `{{var}}` en
- *     la plantilla. Mismo patrón que tenía el código viejo.
+ *   · POST `/api/contact` — route handler server-side que valida
+ *     con Zod, rate-limitea con Upstash Redis (sliding window 3/10min)
+ *     y manda el email vía Resend SDK con template React Email.
+ *   · `<form>` con `onSubmit` — serializamos `FormData` a JSON
+ *     plano `{ name, email, message, _botField }` y hacemos
+ *     `fetch()` al endpoint. El backend devuelve `{ ok: boolean,
+ *     error?: string, id?: string }`.
  *   · Estado local con `useState` — `idle | sending | success | error`.
  *
- * Anti-spam:
- *   1. **Honeypot** — input invisible `name="website"`. Bots que
- *      auto-fillean todos los campos lo van a llenar; humanos no lo
- *      ven (display: none). Si llega con valor, mostramos success
- *      pero NUNCA llamamos a EmailJS — el bot piensa que ganó pero
- *      no consume cuota.
- *   2. **Throttle client-side** — `sessionStorage` guarda timestamp
- *      del último submit; bloqueamos < 30s para prevenir double-clicks
- *      accidentales y spam casual.
- *   3. **Validación HTML5** — `required`, `type="email"`, `minLength`
- *      en mensaje. La validación nativa del browser bloquea submits
- *      malformados antes de tocar nuestro código.
- *   4. **Origin allowlist** — config'd en dashboard EmailJS por el
- *      user (instrucciones en .env.example). Sin esto, alguien con
- *      la public key podría llamar a EmailJS desde otro dominio.
+ * Anti-spam (defense in depth):
+ *   1. **Honeypot client + server** — input `name="_botField"`
+ *      invisible (display: none + tabindex -1 + autocomplete off).
+ *      Server-side el schema Zod exige `_botField` vacío; si trae
+ *      valor el server fingirá éxito (200 OK) sin mandar email
+ *      para que el bot no detecte que fue bloqueado.
+ *   2. **Throttle client-side** — `sessionStorage` con 30s entre
+ *      submits del mismo browser. Capa cosmética anti double-click.
+ *   3. **Rate-limit server-side** — Upstash Ratelimit por IP
+ *      (3 req / 10 min, sliding window). Esta es la capa real
+ *      anti-abuse; el throttle del cliente solo mejora UX.
+ *   4. **Validación HTML5 + Zod** — required, type=email, minLength
+ *      del lado del browser, espejados en el schema Zod del server.
+ *
+ * Por qué `fetch` en lugar de Server Action:
+ *   · Pattern más portable (cualquier framework podría consumir
+ *     `/api/contact`).
+ *   · Permite tipar response como JSON directamente.
+ *   · Cero progressive enhancement perdido — el form igual requiere
+ *     JS para honeypot+throttle, así que SA no aporta ventaja real
+ *     en este caso puntual.
  *
  * A11y:
  *   · Labels asociados con `htmlFor`/`id`.
- *   · `aria-invalid` en inputs con error.
  *   · `aria-live="polite"` en el bloque de estado del submit para
  *     que screen readers anuncien success/error sin interrumpir.
- *   · `aria-describedby` linkea inputs a sus hints/errores.
+ *   · `aria-describedby` linkea botón al status region.
  *   · Botón disabled durante envío + cambio visual del label.
  * ════════════════════════════════════════════════════════════════ */
 
@@ -269,16 +275,17 @@ type SubmitState =
   | { status: "success" }
   | { status: "error"; message: string };
 
-/* Vars de entorno — leídas en build (NEXT_PUBLIC_*). Si alguna falta
- * el form muestra un fallback informativo en lugar de explotar. */
-const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-
 /* Throttle: 30s entre submits del mismo browser. Suficiente para
- * frenar mash-spam casual sin molestar a humanos legítimos. */
+ * frenar double-clicks accidentales. El rate-limit real vive
+ * server-side (Upstash) y es defense-in-depth. */
 const SUBMIT_COOLDOWN_MS = 30_000;
 const COOLDOWN_KEY = "contact-last-submit";
+
+/* Shape de la respuesta del route handler. Mirror del JSON que
+ * devuelve `/api/contact/route.ts` — mantener en sync. */
+type ContactApiResponse =
+  | { ok: true; id?: string }
+  | { ok: false; error: string };
 
 function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -292,13 +299,6 @@ function ContactForm() {
   const messageId = useId();
   const honeypotId = useId();
   const statusId = useId();
-
-  /* Si las env vars no están seteadas (deploy sin .env.local
-   * configurado), mostramos un mensaje de mantenimiento en lugar
-   * del form. Mejor que un "Failed to fetch" al hacer submit. */
-  const isConfigured = Boolean(
-    EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY,
-  );
 
   /* Reset del estado de éxito/error si el usuario empieza a tipear
    * de nuevo (para que la "success card" no se quede pegada
@@ -318,20 +318,11 @@ function ContactForm() {
 
       if (!formRef.current) return;
 
-      /* Honeypot — si tiene valor, fingimos éxito y nos vamos
-       * sin llamar a EmailJS. El bot consume su tiempo pensando
-       * que ganó; nosotros no consumimos cuota. */
-      const honeypotInput =
-        formRef.current.elements.namedItem("website") as HTMLInputElement | null;
-      if (honeypotInput?.value) {
-        setState({ status: "success" });
-        formRef.current.reset();
-        return;
-      }
-
       /* Throttle — leemos timestamp del último submit, comparamos
        * con `now`. `try/catch` por si sessionStorage está bloqueado
-       * (modo incógnito en algunos browsers). */
+       * (modo incógnito en algunos browsers). Esta es la capa
+       * cosmética; el rate-limit server-side es lo que realmente
+       * protege contra abuse. */
       try {
         const lastRaw = sessionStorage.getItem(COOLDOWN_KEY);
         if (lastRaw) {
@@ -351,24 +342,52 @@ function ContactForm() {
         /* sessionStorage no disponible — seguimos sin throttle. */
       }
 
-      if (!isConfigured) {
-        setState({
-          status: "error",
-          message:
-            "El form está en mantenimiento. Mientras tanto, escríbeme directo al email de abajo.",
-        });
-        return;
-      }
-
       setState({ status: "sending" });
 
+      /* Serializamos FormData a un objeto plano. Esto nos da:
+       *   · Body JSON-encoded, fácil de tipar en el handler
+       *   · Cero dependencia del shape de FormData en el server
+       *     (server runtime puede leer el JSON directo con req.json())
+       *   · El honeypot field viaja en el mismo payload */
+      const fd = new FormData(formRef.current);
+      const payload = {
+        name: String(fd.get("name") ?? ""),
+        email: String(fd.get("email") ?? ""),
+        message: String(fd.get("message") ?? ""),
+        _botField: String(fd.get("_botField") ?? ""),
+      };
+
       try {
-        await emailjs.sendForm(
-          EMAILJS_SERVICE_ID!,
-          EMAILJS_TEMPLATE_ID!,
-          formRef.current,
-          { publicKey: EMAILJS_PUBLIC_KEY! },
-        );
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          /* `same-origin` para que no se manden cookies/credentials
+           * a third-parties si el endpoint en algún momento redirige.
+           * El form es same-origin por definición; explicitarlo
+           * deja la intención clara y es defense-in-depth. */
+          credentials: "same-origin",
+        });
+
+        /* Parseo defensivo: si el server devolvió HTML por algún
+         * error de routing (404 stale build, etc.), `.json()`
+         * tira. Lo capturamos como error genérico. */
+        let body: ContactApiResponse;
+        try {
+          body = (await res.json()) as ContactApiResponse;
+        } catch {
+          throw new Error(`Respuesta inválida del servidor (HTTP ${res.status})`);
+        }
+
+        if (!res.ok || !body.ok) {
+          /* `body.error` es siempre string si `!ok`; fallback
+           * defensivo por si el server cambia el contrato. */
+          const message =
+            body.ok === false && body.error
+              ? body.error
+              : "No pude enviar el mensaje. Prueba de nuevo en un momento.";
+          throw new Error(message);
+        }
 
         setState({ status: "success" });
         formRef.current.reset();
@@ -379,21 +398,22 @@ function ContactForm() {
           /* noop */
         }
       } catch (err) {
-        /* EmailJS errors traen `.text` con el mensaje del backend.
-         * Logueamos en dev para debugging pero al user le mostramos
-         * un mensaje genérico (no leakeamos detalles internos). */
+        /* En dev imprimimos el error completo para debug. En prod
+         * solo mostramos el mensaje genérico ya capturado en `state`. */
         if (process.env.NODE_ENV !== "production") {
           // eslint-disable-next-line no-console
-          console.error("EmailJS error:", err);
+          console.error("[contact-form] submit failed:", err);
         }
         setState({
           status: "error",
           message:
-            "No pude enviar el mensaje. Prueba de nuevo o escríbeme al email de abajo.",
+            err instanceof Error
+              ? err.message
+              : "No pude enviar el mensaje. Prueba de nuevo o escríbeme al email de abajo.",
         });
       }
     },
-    [isConfigured],
+    [],
   );
 
   const isSending = state.status === "sending";
@@ -415,7 +435,13 @@ function ContactForm() {
 
       {/* Honeypot — invisible para humanos (display none + tabindex
        *  -1 + autocomplete off). Los bots scrapean inputs y los
-       *  rellenan; usamos eso para detectarlos. */}
+       *  rellenan; usamos eso para detectarlos.
+       *
+       *  El name `_botField` es deliberadamente abstracto — un name
+       *  como `website` o `phone` podría confundir a un usuario con
+       *  password manager agresivo. El underscore + nombre interno
+       *  señala "campo de sistema, no llenar" para autofill heurístico
+       *  y para humanos que inspeccionen el DOM. */}
       <div aria-hidden className="hidden">
         <label htmlFor={honeypotId}>
           No completes este campo si eres humano
@@ -423,7 +449,7 @@ function ContactForm() {
         <input
           id={honeypotId}
           type="text"
-          name="website"
+          name="_botField"
           tabIndex={-1}
           autoComplete="off"
         />
@@ -529,7 +555,7 @@ function ContactForm() {
               tone="success"
               icon={CheckCircle2}
               title="Mensaje enviado"
-              body="Te respondo desde yonkitas9@gmail.com pronto. Revisa la carpeta de spam si no llega."
+              body="Gracias por contactarme. Responderé lo antes posible."
             />
           )}
           {isError && (

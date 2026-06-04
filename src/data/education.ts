@@ -7,10 +7,10 @@
  * aire con la experiencia laboral) y se evalúa por proyectos, no por
  * cartón.
  *
- * Los 3 primeros entries son títulos formales (degree). El extra
- * (`educationExtra`, IONIC en UNal) es un curso/proyecto extra-curricular
- * — se renderiza aparte como footnote para no diluir el peso visual de
- * los degrees.
+ * `educationDegrees` son los títulos formales (degree, peso fuerte).
+ * `educationCertifications` son cursos / certificaciones online que
+ * viven abajo como footnotes muy compactas — complementan sin diluir
+ * el peso visual de los degrees.
  *
  * `current: true` activa el indicador "Hoy" en la UI (degree en curso).
  *
@@ -45,11 +45,42 @@ export const educationDegrees: readonly EducationEntry[] = [
   },
 ] as const;
 
-/** Curso / proyecto extra-curricular — rendered como footnote, no
- *  como degree para no diluir el peso de los títulos formales arriba. */
-export const educationExtra = {
-  label: "Curso",
-  degree: "Desarrollo Móvil con IONIC",
-  institution: "Universidad Nacional",
-  period: "2020 — 2022",
-} as const;
+/* Footnote shape para extras académicos — cursos y certificaciones
+ * que complementan los degrees sin competir por peso visual.
+ * Rendered como líneas mono compactas con prefijo `+ <label>`
+ * (Curso, Cert) y separadores `·`. Genérico a propósito para que
+ * agregar un curso nuevo en el futuro sea una entry más al array
+ * sin tocar el tipo. */
+export type EducationFootnote = {
+  readonly label: string;
+  readonly degree: string;
+  readonly institution: string;
+  readonly period: string;
+};
+
+/* Certificaciones · cursos cortos online que firman tracks
+ * específicos. Se renderean al pie del strip como footnotes mono
+ * uppercase muy compactas — un solo pattern visual (`FootnoteRow`
+ * en `Experience.tsx`) los maneja a todos. Para agregar más en el
+ * futuro, simplemente extender el array; el componente las mapea
+ * automáticamente. Ordenar por fecha desc cuando crezca. */
+export const educationCertifications: readonly EducationFootnote[] = [
+  {
+    label: "Cert",
+    degree: "UX/UI y Prototipado Digital",
+    institution: "Udemy",
+    period: "2022",
+  },
+  {
+    label: "Cert",
+    degree: "Git y GitHub Completo De Cero",
+    institution: "Udemy",
+    period: "2022",
+  },
+  {
+    label: "Cert",
+    degree: "Fundamentos de Programación",
+    institution: "Udemy",
+    period: "2022",
+  },
+] as const;
