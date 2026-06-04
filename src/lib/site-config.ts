@@ -22,7 +22,19 @@ export const siteConfig = {
     "Desarrollador frontend con más de 3 años construyendo interfaces que se sienten bien y se mantienen mejor. Especializado en Next.js, Angular y TypeScript.",
   shortDescription:
     "Construyo interfaces que se sienten bien y se mantienen mejor.",
-  url: "https://jhonatanbecerra.dev",
+  /**
+   * URL canónica de producción. Es la single source of truth para:
+   *   · `metadataBase` (URL absoluta de OG images + canonical)
+   *   · `og:url`, `twitter:image`
+   *   · sitemap.xml entries
+   *   · robots.txt `host` + `sitemap`
+   *   · JSON-LD `Person.url`
+   *   · OG image bottom-right display (derivado con `new URL(url).host`)
+   *
+   * Cuando migremos a un custom domain (ej. jhonatanbecerra.dev),
+   * cambiar SOLO acá y todo lo demás se reflejará automáticamente.
+   */
+  url: "https://jhonatanbecerra-portfolio.vercel.app",
   locale: "es-CO",
   location: "Bogotá, Colombia",
   available: true,

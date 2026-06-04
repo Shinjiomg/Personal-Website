@@ -82,6 +82,11 @@ export default async function OpenGraphImage() {
   ).then((res) => res.arrayBuffer());
   const portraitSrc = `data:image/jpeg;base64,${Buffer.from(portraitBuffer).toString("base64")}`;
 
+  /* Display host derivado del siteConfig — nunca hardcodeamos la URL
+   * en el JSX. Cuando migremos a un custom domain (ej. .dev), la
+   * OG image se actualiza sin tocar este file. */
+  const displayHost = new URL(siteConfig.url).host;
+
   return new ImageResponse(
     (
       <div
@@ -204,14 +209,19 @@ export default async function OpenGraphImage() {
             </div>
           </div>
 
-          {/* ─── Bottom row · Stack + URL ─── */}
+          {/* ─── Bottom block · Stack + URL stacked ─────────── *
+           * Vertical en vez de horizontal porque el host de Vercel
+           * (jhonatanbecerra-portfolio.vercel.app, 38 chars) no
+           * cabe en horizontal junto a la stack list en 592px
+           * disponibles. Stack arriba (más jerarquía), URL debajo
+           * en mono como "deployment signature". */}
           <div
             style={{
               display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
+              flexDirection: "column",
+              gap: 10,
               borderTop: `1px solid ${COLORS.hairline}`,
-              paddingTop: 24,
+              paddingTop: 22,
               marginTop: 20,
             }}
           >
@@ -245,14 +255,17 @@ export default async function OpenGraphImage() {
             <div
               style={{
                 display: "flex",
-                fontSize: 18,
-                fontWeight: 600,
+                alignItems: "center",
+                gap: 8,
+                fontSize: 17,
+                fontWeight: 500,
                 color: COLORS.muted,
-                letterSpacing: "0.04em",
+                letterSpacing: "0.02em",
                 fontFamily: "ui-monospace, 'Cascadia Mono', 'SF Mono', monospace",
               }}
             >
-              jhonatanbecerra.dev
+              <span style={{ opacity: 0.55 }}>→</span>
+              <span>{displayHost}</span>
             </div>
           </div>
         </div>

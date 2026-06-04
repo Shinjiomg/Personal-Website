@@ -19,8 +19,9 @@ Portafolio personal de Jhonatan Becerra, desarrollador frontend con sede en Bogo
 
 ## Rutas principales del sitio
 
-- `/` — Home con resumen, experiencia y bloque de contacto.
-- `/portafolio` — Proyectos en detalle.
+- `/` — Home one-page con secciones de inicio, sobre mí, experiencia, portafolio y contacto.
+- `/sitemap.xml` — Sitemap completo.
+- `/robots.txt` — Reglas para crawlers.
 
 ## Para qué sirve este archivo
 
