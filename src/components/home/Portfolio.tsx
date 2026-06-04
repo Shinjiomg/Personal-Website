@@ -11,11 +11,13 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Dialog, DialogCloseButton } from "@/components/ui/dialog";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { buttonVariants } from "@/components/ui/button";
-import { projects, type Project } from "@/data/portfolio";
+import type { Project } from "@/data/portfolio";
+import { useProjects } from "@/hooks/use-projects";
 import { cn } from "@/lib/utils";
 
 /**
@@ -60,6 +62,9 @@ import { cn } from "@/lib/utils";
  * el state — el dialog se desmonta con animación de salida.
  */
 export function Portfolio() {
+  const t = useTranslations("Portfolio");
+  const tCommon = useTranslations("Common");
+  const projects = useProjects();
   const [activeProject, setActiveProject] = useState<Project | null>(null);
 
   const handleClose = useCallback(() => setActiveProject(null), []);
@@ -77,19 +82,18 @@ export function Portfolio() {
       <div className="container-site py-10 sm:py-14 lg:py-16">
         {/* ─── Header de la sección ───────────────────────────── */}
         <RevealUp className="max-w-3xl">
-          <Eyebrow>Portafolio</Eyebrow>
+          <Eyebrow>{t("eyebrow")}</Eyebrow>
 
           <h2 className="mt-6 font-display text-[clamp(2.25rem,5.5vw,4rem)] leading-[1.04] tracking-[-0.028em] text-foreground-strong text-balance">
-            Sitios que ya están{" "}
-            <em className="italic font-normal text-foreground/75">en vivo</em>{" "}
-            y trabajando.
+            {t("headlineLead")}{" "}
+            <em className="italic font-normal text-foreground/75">
+              {t("headlineHighlight")}
+            </em>{" "}
+            {t("headlineTrail")}
           </h2>
 
           <p className="mt-7 max-w-2xl text-[16.5px] leading-relaxed text-muted-foreground sm:text-[17.5px]">
-            Productos del studio, casos de cliente entregados bajo la marca
-            Pagetook y trabajo previo. Cada uno tiene contexto detrás —
-            problema, decisión y stack. Haz click en cualquiera para abrir
-            el caso completo.
+            {t("intro")}
           </p>
         </RevealUp>
 
@@ -125,22 +129,21 @@ export function Portfolio() {
             <span aria-hidden className="rule-editorial-line" />
             <span className="mx-4 inline-flex items-center gap-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-subtle-foreground">
               <Sparkles aria-hidden className="size-3" />
-              Tu proyecto, en este grid
+              {t("closingDividerLabel")}
             </span>
             <span aria-hidden className="rule-editorial-line" />
           </div>
 
           <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-xl text-[15.5px] leading-relaxed text-muted-foreground sm:text-[16.5px]">
-              ¿Tienes una idea que quiere salir a producción rápido y bien?
-              Hablemos — el próximo caso de este grid puede ser el tuyo.
+              {t("closingCopy")}
             </p>
 
             <Link
               href="#contacto"
               className={cn(buttonVariants({ variant: "ink", size: "xl" }))}
             >
-              Hablemos
+              {tCommon("ctaTalk")}
               <ArrowUpRight aria-hidden />
             </Link>
           </div>
@@ -230,6 +233,7 @@ function ProjectCard({
   index: number;
   onOpen: (p: Project) => void;
 }) {
+  const t = useTranslations("Portfolio");
   const titleId = `project-card-title-${project.slug}`;
 
   return (
@@ -299,7 +303,10 @@ function ProjectCard({
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface-elevated">
           <Image
             src={`/portfolio/${project.slug}.jpg`}
-            alt={`Captura del sitio ${project.name} — ${project.shortDesc}`}
+            alt={t("cardImageAlt", {
+              name: project.name,
+              description: project.shortDesc,
+            })}
             fill
             sizes="(min-width: 1024px) 360px, (min-width: 768px) 33vw, 100vw"
             className="object-cover object-top transition-transform duration-700 ease-out group-hover/card:scale-[1.025]"
@@ -353,7 +360,7 @@ function ProjectCard({
            *  `mt-auto pt-6` empuja al fondo de la columna flex con
            *  separación generosa del título arriba. */}
           <div className="mt-auto inline-flex items-center gap-1.5 pt-6 font-mono text-[12px] font-semibold uppercase tracking-[0.18em] text-foreground/80">
-            Ver caso
+            {t("viewCase")}
             <ArrowRight
               aria-hidden
               className="size-3.5 transition-transform duration-300 ease-out group-hover/card:translate-x-1"
@@ -405,6 +412,7 @@ function ProjectDialogContent({
   project: Project;
   onClose: () => void;
 }) {
+  const t = useTranslations("Portfolio");
   const titleId = `project-dialog-title-${project.slug}`;
 
   return (
@@ -419,7 +427,7 @@ function ProjectDialogContent({
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface-elevated">
         <Image
           src={`/portfolio/${project.slug}.jpg`}
-          alt={`Captura del sitio ${project.name}`}
+          alt={t("dialogImageAlt", { name: project.name })}
           fill
           sizes="(min-width: 1024px) 1080px, 100vw"
           className="object-cover object-top"
@@ -475,7 +483,7 @@ function ProjectDialogContent({
         </div>
 
         {/* Highlights */}
-        <DetailBlock label="Highlights" className="mt-10">
+        <DetailBlock label={t("dialog.highlightsLabel")} className="mt-10">
           <ul className="space-y-2.5">
             {project.highlights.map((h, i) => (
               <li
@@ -493,7 +501,7 @@ function ProjectDialogContent({
         </DetailBlock>
 
         {/* Stack */}
-        <DetailBlock label="Stack" className="mt-8">
+        <DetailBlock label={t("dialog.stackLabel")} className="mt-8">
           <ul className="flex flex-wrap gap-2">
             {project.stack.map((tech) => (
               <li
@@ -507,7 +515,7 @@ function ProjectDialogContent({
         </DetailBlock>
 
         {/* Role */}
-        <DetailBlock label="Rol" className="mt-8">
+        <DetailBlock label={t("dialog.roleLabel")} className="mt-8">
           <p className="text-[15px] leading-relaxed text-foreground/85 sm:text-[15.5px]">
             {project.role}
           </p>
@@ -516,7 +524,7 @@ function ProjectDialogContent({
         {/* CTAs */}
         <div className="mt-10 flex flex-col gap-3 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-subtle-foreground">
-            Caso de estudio · {project.slug}
+            {t("dialog.caseStudyMeta", { slug: project.slug })}
           </p>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
             <button
@@ -527,7 +535,7 @@ function ProjectDialogContent({
                 "w-full sm:w-auto",
               )}
             >
-              Cerrar
+              {t("dialog.close")}
             </button>
             <Link
               href={project.url}
@@ -538,7 +546,7 @@ function ProjectDialogContent({
                 "w-full sm:w-auto",
               )}
             >
-              Ver sitio en vivo
+              {t("dialog.viewLive")}
               <ArrowUpRight aria-hidden />
             </Link>
           </div>

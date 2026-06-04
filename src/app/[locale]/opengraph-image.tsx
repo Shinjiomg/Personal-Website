@@ -61,7 +61,10 @@ import { siteConfig } from "@/lib/site-config";
  * ════════════════════════════════════════════════════════════════ */
 
 export const runtime = "edge";
-export const alt = `${siteConfig.name} — ${siteConfig.tagline}`;
+/* Alt bilingüe — los OG crawlers (LinkedIn, X, WhatsApp) no envían
+ * Accept-Language al fetch de imágenes; dejar ambos idiomas asegura
+ * accesibilidad sin importar quién consuma el preview. */
+export const alt = `${siteConfig.name} — Frontend Developer / Desarrollador Frontend`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -73,7 +76,23 @@ const COLORS = {
   accent: "#C4FF00",
 };
 
-export default async function OpenGraphImage() {
+/* Labels por locale · inline para mantener el edge bundle pequeño
+ * (importar el sistema de messages para 2 strings serían ~14KB extra
+ * en cada request a la imagen). Si en el futuro agregamos más copy
+ * dinámico acá, refactor a `getTranslations` con namespace dedicado. */
+const LABELS: Record<string, { eyebrow: string; role: string }> = {
+  es: { eyebrow: "Portafolio", role: "Desarrollador Frontend." },
+  en: { eyebrow: "Portfolio", role: "Frontend Developer." },
+};
+
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function OpenGraphImage({ params }: Props) {
+  const { locale } = await params;
+  const t = LABELS[locale] ?? LABELS.es;
+
   /* Load co-located portrait. `new URL(..., import.meta.url)`
    * resuelve al asset bundled junto a este file, no fetchea por
    * HTTP — funciona en edge runtime y en build time del bundler. */
@@ -136,7 +155,7 @@ export default async function OpenGraphImage() {
                 boxShadow: `0 0 0 5px rgba(196, 255, 0, 0.18)`,
               }}
             />
-            <span>Portafolio</span>
+            <span>{t.eyebrow}</span>
             <div
               style={{
                 width: 48,
@@ -205,7 +224,7 @@ export default async function OpenGraphImage() {
                 letterSpacing: "-0.018em",
               }}
             >
-              Desarrollador Frontend.
+              {t.role}
             </div>
           </div>
 

@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
-import { contactLinks } from "@/lib/contact-links";
+import { useContactLinks } from "@/lib/contact-links";
 import { cn } from "@/lib/utils";
 
 /**
@@ -56,6 +57,8 @@ import { cn } from "@/lib/utils";
  *     salida para usuarios con esa pref.
  */
 export function WhatsAppFab() {
+  const t = useTranslations("WhatsAppFab");
+  const contactLinks = useContactLinks();
   const prefersReduced = useReducedMotion();
   const [contactInView, setContactInView] = useState(false);
   const [bodyLocked, setBodyLocked] = useState(false);
@@ -135,7 +138,7 @@ export function WhatsAppFab() {
             href={contactLinks.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Hablar conmigo por WhatsApp"
+            aria-label={t("ariaLabel")}
             className={cn(
               /* Base — pill ink con sombra de elevación. La sombra
                * usa tints del foreground (no negro puro) para no
@@ -163,7 +166,7 @@ export function WhatsAppFab() {
             {/* Label — sólo desktop/tablet. En mobile se ahorra
              * espacio y queda como circle puro. */}
             <span className="hidden text-[14px] font-medium leading-none sm:inline">
-              WhatsApp
+              {t("label")}
             </span>
 
             {/* Lima dot — top-right corner como notification badge.

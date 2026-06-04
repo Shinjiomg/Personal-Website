@@ -10,6 +10,7 @@ import {
   SiTypescript,
 } from "react-icons/si";
 import type { IconType } from "react-icons";
+import { useTranslations } from "next-intl";
 
 import { BrowserMockup } from "@/components/home/BrowserMockup";
 import { Eyebrow } from "@/components/ui/eyebrow";
@@ -151,38 +152,34 @@ function RevealUp({
  * ROW 1 · LEFT — Bio + manifesto editorial
  * ════════════════════════════════════════════════════════════════ */
 function AboutContent() {
+  const t = useTranslations("About");
   return (
     <div className="mx-auto max-w-xl text-center md:mx-0 md:max-w-none md:text-left">
       <RevealUp>
-        <Eyebrow>Sobre mí</Eyebrow>
+        <Eyebrow>{t("eyebrow")}</Eyebrow>
       </RevealUp>
 
       <RevealUp delay={0.05}>
         <h2 className="mt-5 font-display text-[clamp(1.875rem,5vw,3.5rem)] leading-[1.06] tracking-[-0.028em] text-foreground-strong text-balance">
-          Construyo interfaces que{" "}
-          <MarkerHighlight>envejecen bien</MarkerHighlight>.
+          {t("headlineLead")}{" "}
+          <MarkerHighlight>{t("headlineHighlight")}</MarkerHighlight>.
         </h2>
       </RevealUp>
 
       <RevealUp delay={0.12}>
         <div className="mx-auto mt-7 max-w-xl space-y-4 text-[15.5px] leading-[1.7] text-muted-foreground sm:text-[16.5px] md:mx-0">
           <p>
-            Frontend developer con foco en{" "}
-            <strong className="font-semibold text-foreground">Angular</strong>,{" "}
-            <strong className="font-semibold text-foreground">
-              TypeScript
-            </strong>{" "}
-            y{" "}
-            <strong className="font-semibold text-foreground">Next.js</strong>.
-            Más de {siteConfig.yearsOfExperience} años construyendo interfaces
-            de producto desde {siteConfig.location}, mostly remoto con equipos
-            en US y LATAM.
+            {t.rich("bioParagraph1", {
+              years: siteConfig.yearsOfExperience,
+              location: siteConfig.location,
+              s: (chunks) => (
+                <strong className="font-semibold text-foreground">
+                  {chunks}
+                </strong>
+              ),
+            })}
           </p>
-          <p>
-            Me especializo en arquitectura modular y componentes que
-            sobreviven al próximo redesign — el tipo de código que el dev del
-            próximo año puede leer sin pingear al autor del de hoy.
-          </p>
+          <p>{t("bioParagraph2")}</p>
         </div>
       </RevealUp>
     </div>
@@ -193,6 +190,7 @@ function AboutContent() {
  * ROW 1 · RIGHT — Browser desktop con landing page mockup
  * ════════════════════════════════════════════════════════════════ */
 function DesktopMockupBlock() {
+  const t = useTranslations("About.captions");
   return (
     <RevealUp delay={0.1}>
       <div className="relative isolate mx-auto w-full max-w-[380px] sm:max-w-[460px] md:max-w-none">
@@ -212,9 +210,7 @@ function DesktopMockupBlock() {
           </BrowserMockup>
         </div>
 
-        <MockupCaption className="mt-7 sm:mt-9">
-          Landings & marketing — Next.js + Tailwind
-        </MockupCaption>
+        <MockupCaption className="mt-7 sm:mt-9">{t("desktop")}</MockupCaption>
       </div>
     </RevealUp>
   );
@@ -224,6 +220,7 @@ function DesktopMockupBlock() {
  * ROW 2 · LEFT — Tablet + Mobile composition
  * ════════════════════════════════════════════════════════════════ */
 function DevicesMockupBlock() {
+  const t = useTranslations("About.captions");
   return (
     <RevealUp delay={0.1}>
       <div className="relative isolate mx-auto w-full max-w-[340px] sm:max-w-[440px] md:max-w-none">
@@ -250,9 +247,7 @@ function DevicesMockupBlock() {
         </div>
 
         {/* Caption — mt extra para clear el peek del mobile */}
-        <MockupCaption className="mt-12 sm:mt-16">
-          Componentes responsive — Angular & React
-        </MockupCaption>
+        <MockupCaption className="mt-12 sm:mt-16">{t("devices")}</MockupCaption>
       </div>
     </RevealUp>
   );
@@ -286,6 +281,8 @@ function StatsBlock() {
  *   · mt generoso para despegar del grid
  * ════════════════════════════════════════════════════════════════ */
 function SectionExitCTA() {
+  const t = useTranslations("About.exitCta");
+  const tCommon = useTranslations("Common");
   return (
     <RevealUp delay={0.2} className="mt-12 sm:mt-14 lg:mt-16">
       <div className="flex items-center justify-center gap-4 sm:gap-6">
@@ -301,9 +298,9 @@ function SectionExitCTA() {
             aria-hidden
             className="size-1.5 rounded-full bg-[var(--accent)]"
           />
-          ¿Te suena?{" "}
+          {t("lead")}{" "}
           <span className="font-display italic font-semibold text-foreground-strong decoration-[var(--accent)] decoration-2 underline-offset-[5px] group-hover:underline">
-            Hablemos
+            {tCommon("ctaTalk")}
           </span>
           <ArrowRight
             aria-hidden

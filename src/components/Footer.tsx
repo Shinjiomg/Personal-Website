@@ -1,13 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FileText, Mail } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { GitHubIcon } from "@/components/icons/GitHubIcon";
 import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { LocaleSwitch } from "@/components/LocaleSwitch";
 import { siteConfig } from "@/lib/site-config";
-import { contactLinks } from "@/lib/contact-links";
-import { footerSections } from "@/data/navigation";
+import { useContactLinks } from "@/lib/contact-links";
+import { navLinks } from "@/data/navigation";
 
 /**
  * Footer editorial de 2 capas — versión "calma" del patrón Orinoco
@@ -44,8 +46,11 @@ import { footerSections } from "@/data/navigation";
  * anchors de este footer. Bajo coste de re-renders.
  */
 export function Footer() {
+  const t = useTranslations("Footer");
+  const tNav = useTranslations("Nav");
+  const tCommon = useTranslations("Common");
+  const contactLinks = useContactLinks();
   const year = new Date().getFullYear();
-  const navSection = footerSections.find((s) => s.title === "Navegación");
 
   return (
     <footer className="border-t border-border bg-background">
@@ -64,7 +69,7 @@ export function Footer() {
           <div className="relative size-20 shrink-0 overflow-hidden rounded-2xl ring-1 ring-foreground/10 sm:size-[88px]">
             <Image
               src="/team/jhonatan-becerra.webp"
-              alt={`Retrato de ${siteConfig.name}`}
+              alt={t("portraitAlt", { name: siteConfig.name })}
               fill
               sizes="88px"
               className="object-cover"
@@ -78,7 +83,7 @@ export function Footer() {
           <div className="min-w-0 flex-1">
             <Link
               href="#inicio"
-              aria-label={`${siteConfig.name} — Inicio`}
+              aria-label={tNav("logoAriaLabel", { name: siteConfig.name })}
               className="group inline-flex items-baseline gap-[0.22em] font-display text-[22px] font-medium leading-none tracking-[-0.022em] text-foreground-strong transition-opacity hover:opacity-90 sm:text-[26px]"
             >
               {siteConfig.wordmark}
@@ -89,8 +94,8 @@ export function Footer() {
             </Link>
 
             <p className="mt-3 max-w-sm text-[14.5px] leading-relaxed text-muted-foreground">
-              {siteConfig.shortDescription} Desde {siteConfig.location} para
-              LATAM y remoto.
+              {t("shortDescription")}{" "}
+              {t("locationDescription", { location: siteConfig.location })}
             </p>
 
             {/* Chip de meta — location + disponibilidad.
@@ -109,41 +114,47 @@ export function Footer() {
                     aria-hidden
                     className="hidden h-[10px] w-px bg-foreground/15 sm:inline-block"
                   />
-                  <span>Disponible para nuevos proyectos</span>
+                  <span>{tCommon("available")}</span>
                 </>
               )}
+            </div>
+
+            {/* Locale switch · co-localizado con la marca para que el
+             *  visitante que llegó por accidente en el idioma equivocado
+             *  encuentre el toggle en el "header" del footer, antes de
+             *  scrollear los items del nav o de Conectar. */}
+            <div className="mt-5">
+              <LocaleSwitch />
             </div>
           </div>
         </div>
 
         {/* Explora — nav del site (todos anchors onepage). */}
-        {navSection && (
-          <nav aria-labelledby="footer-explore" className="sm:col-span-1 lg:col-span-3">
-            <h3
-              id="footer-explore"
-              className="flex items-center gap-3 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-subtle-foreground"
-            >
-              <span aria-hidden className="h-px w-6 bg-foreground/25" />
-              Explora
-            </h3>
-            <ul className="mt-5 flex flex-col gap-3 text-[14px]">
-              {navSection.links.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="group relative inline-block text-foreground/75 transition-colors hover:text-foreground"
-                  >
-                    {link.label}
-                    <span
-                      aria-hidden
-                      className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 rounded-full bg-[var(--accent)] transition-transform duration-300 ease-out group-hover:scale-x-100"
-                    />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
+        <nav aria-labelledby="footer-explore" className="sm:col-span-1 lg:col-span-3">
+          <h3
+            id="footer-explore"
+            className="flex items-center gap-3 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-subtle-foreground"
+          >
+            <span aria-hidden className="h-px w-6 bg-foreground/25" />
+            {t("exploreLabel")}
+          </h3>
+          <ul className="mt-5 flex flex-col gap-3 text-[14px]">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="group relative inline-block text-foreground/75 transition-colors hover:text-foreground"
+                >
+                  {tNav(`items.${link.key}`)}
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 rounded-full bg-[var(--accent)] transition-transform duration-300 ease-out group-hover:scale-x-100"
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
         {/* Conectar — canales con icono + label.
             Email/WhatsApp llevan el dato útil; GitHub/LinkedIn el
@@ -151,7 +162,7 @@ export function Footer() {
         <div className="sm:col-span-1 lg:col-span-4">
           <h3 className="flex items-center gap-3 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-subtle-foreground">
             <span aria-hidden className="h-px w-6 bg-foreground/25" />
-            Conectar
+            {t("connectLabel")}
           </h3>
           <ul className="mt-5 flex flex-col gap-3 text-[14px]">
             <ConnectItem
@@ -185,7 +196,7 @@ export function Footer() {
             <ConnectItem
               href="/cv.pdf"
               icon={FileText}
-              label="CV · PDF · EN"
+              label={t("cvLabel")}
               external
               stroke
             />

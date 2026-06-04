@@ -4,17 +4,18 @@ import { AnimatePresence, motion } from "motion/react";
 import { FileText } from "lucide-react";
 import Link from "next/link";
 import { useState, type KeyboardEvent } from "react";
+import { useTranslations } from "next-intl";
 
 import { buttonVariants } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { MarkerHighlight } from "@/components/ui/marker-highlight";
-import {
-  educationCertifications,
-  educationDegrees,
-  type EducationEntry,
-  type EducationFootnote,
+import type {
+  EducationEntry,
+  EducationFootnote,
 } from "@/data/education";
-import { experience, type ExperienceJob } from "@/data/experience";
+import type { ExperienceJob } from "@/data/experience";
+import { useEducation } from "@/hooks/use-education";
+import { useExperienceJobs } from "@/hooks/use-experience";
 import { cn } from "@/lib/utils";
 
 /**
@@ -59,8 +60,9 @@ import { cn } from "@/lib/utils";
  *     repite el truco.
  */
 export function Experience() {
+  const jobs = useExperienceJobs();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const selected = experience[selectedIndex];
+  const selected = jobs[selectedIndex];
   if (!selected) return null;
 
   return (
@@ -73,13 +75,13 @@ export function Experience() {
             job={selected}
             index={selectedIndex + 1}
             isCurrent={selectedIndex === 0}
-            jobs={experience}
+            jobs={jobs}
             selectedIndex={selectedIndex}
             onSelect={setSelectedIndex}
           />
 
           <Sidebar
-            jobs={experience}
+            jobs={jobs}
             selectedIndex={selectedIndex}
             onSelect={setSelectedIndex}
           />
@@ -107,17 +109,18 @@ export function Experience() {
  * Header — eyebrow + manifesto editorial
  * ════════════════════════════════════════════════════════════════ */
 function Header() {
+  const t = useTranslations("Experience");
   return (
     <div className="mx-auto max-w-2xl text-center md:mx-0 md:max-w-3xl md:text-left">
       <RevealUp>
-        <Eyebrow>Experiencia</Eyebrow>
+        <Eyebrow>{t("eyebrow")}</Eyebrow>
       </RevealUp>
 
       <RevealUp delay={0.05}>
         <h2 className="mt-5 font-display text-[clamp(1.875rem,5vw,3.5rem)] leading-[1.06] tracking-[-0.028em] text-foreground-strong text-balance">
-          De freelance a{" "}
-          <MarkerHighlight>frontend lead</MarkerHighlight> — sin bajar el
-          standard.
+          {t("headlineLead")}{" "}
+          <MarkerHighlight>{t("headlineHighlight")}</MarkerHighlight>{" "}
+          {t("headlineTrail")}
         </h2>
       </RevealUp>
     </div>
@@ -171,6 +174,7 @@ function FeaturedPanel({
   selectedIndex: number;
   onSelect: (i: number) => void;
 }) {
+  const t = useTranslations("Experience");
   const indexLabel = String(index).padStart(2, "0");
 
   return (
@@ -207,7 +211,7 @@ function FeaturedPanel({
                     <>
                       <span aria-hidden className="h-px w-3 bg-foreground/25" />
                       <span className="font-semibold text-foreground">
-                        Ahora
+                        {t("currentLabel")}
                       </span>
                     </>
                   )}
@@ -292,11 +296,12 @@ function HighlightsStrip({
 }: {
   highlights: readonly { value: string; label: string }[];
 }) {
+  const t = useTranslations("Experience");
   return (
     <div className="mt-10 hidden sm:mt-12 sm:block">
       <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-subtle-foreground">
         <span aria-hidden className="h-px w-6 bg-foreground/25" />
-        <span className="font-semibold">Destacados</span>
+        <span className="font-semibold">{t("highlightsLabel")}</span>
       </div>
 
       <ul className="mt-5 grid grid-cols-1 gap-y-5 sm:mt-6 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-0 lg:gap-x-7">
@@ -336,6 +341,7 @@ function Sidebar({
   selectedIndex: number;
   onSelect: (i: number) => void;
 }) {
+  const t = useTranslations("Experience");
   const handleKey = (e: KeyboardEvent<HTMLButtonElement>, i: number) => {
     const last = jobs.length - 1;
     if (e.key === "ArrowDown" || e.key === "ArrowRight") {
@@ -358,14 +364,14 @@ function Sidebar({
       <RevealUp delay={0.1}>
         <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-subtle-foreground">
           <span aria-hidden className="h-px w-6 bg-foreground/25" />
-          <span className="font-semibold">Trayectoria</span>
+          <span className="font-semibold">{t("sidebarLabel")}</span>
         </div>
       </RevealUp>
 
       <ol
         role="tablist"
         aria-orientation="vertical"
-        aria-label="Lista de experiencias profesionales"
+        aria-label={t("sidebarAriaLabel")}
         className="mt-5 divide-y divide-foreground/10 border-y border-foreground/10"
       >
         {jobs.map((job, i) => (
@@ -406,6 +412,7 @@ function SidebarRow({
   onSelect: () => void;
   onKeyDown: (e: KeyboardEvent<HTMLButtonElement>) => void;
 }) {
+  const t = useTranslations("Experience");
   const indexLabel = String(index).padStart(2, "0");
 
   return (
@@ -473,7 +480,9 @@ function SidebarRow({
           <span className="flex items-center gap-2 tabular-nums">
             {isCurrent && (
               <>
-                <span className="font-semibold text-foreground">Ahora</span>
+                <span className="font-semibold text-foreground">
+                  {t("currentLabel")}
+                </span>
                 <span aria-hidden className="h-px w-2 bg-foreground/25" />
               </>
             )}
@@ -533,11 +542,13 @@ function CareerTimeline({
   selectedIndex: number;
   onSelect: (i: number) => void;
 }) {
-  /* Parse dates a fracciones de año (Feb 2026 → 2026.083).
-   * "Presente" usa la fecha actual del browser. */
+  const t = useTranslations("Experience");
+  /* Las fracciones (Feb 2026 → 2026.083) llegan pre-calculadas desde
+   * el hook `useExperienceJobs()`. El hook se encarga de la lógica
+   * de "presente" → fecha actual del navegador. */
   const ranges = jobs.map((job) => ({
-    start: parseSpanishDate(job.start),
-    end: parseSpanishDate(job.end),
+    start: job.startFraction,
+    end: job.endFraction,
   }));
 
   const minDate = Math.min(...ranges.map((r) => r.start));
@@ -559,7 +570,7 @@ function CareerTimeline({
       {/* Label */}
       <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-subtle-foreground">
         <span aria-hidden className="h-px w-6 bg-foreground/25" />
-        <span className="font-semibold">Timeline</span>
+        <span className="font-semibold">{t("timelineLabel")}</span>
       </div>
 
       <div className="mt-5">
@@ -618,7 +629,11 @@ function CareerTimeline({
                 <button
                   type="button"
                   onClick={() => onSelect(i)}
-                  aria-label={`Ver detalle de ${job.company} (${job.start} — ${job.end})`}
+                  aria-label={t("timelineBarAriaLabel", {
+                    company: job.company,
+                    start: job.start,
+                    end: job.end,
+                  })}
                   className="group/bar relative block h-5 w-full cursor-pointer focus:outline-none"
                 >
                   {/* Bar */}
@@ -672,49 +687,11 @@ function CareerTimeline({
               {jobs[selectedIndex]?.company}
             </span>
           </span>
-          <span>Click una barra o entrada del sidebar</span>
+          <span>{t("timelineHint")}</span>
         </div>
       </div>
     </div>
   );
-}
-
-/* ─────────────────────────────────────────────────────────────────
- * parseSpanishDate — "Feb 2026" / "Presente" → fracción de año.
- *
- * Ene 2025 → 2025.000
- * Feb 2026 → 2026.083
- * Presente → fecha actual del browser
- * ──────────────────────────────────────────────────────────────── */
-const SPANISH_MONTHS = [
-  "ene",
-  "feb",
-  "mar",
-  "abr",
-  "may",
-  "jun",
-  "jul",
-  "ago",
-  "sep",
-  "oct",
-  "nov",
-  "dic",
-] as const;
-
-function parseSpanishDate(dateStr: string): number {
-  const normalized = dateStr.trim().toLowerCase();
-  if (normalized === "presente") {
-    const now = new Date();
-    return now.getFullYear() + now.getMonth() / 12;
-  }
-  const parts = normalized.split(/\s+/);
-  if (parts.length !== 2) return new Date().getFullYear();
-  const [month, year] = parts as [string, string];
-  const monthIndex = SPANISH_MONTHS.indexOf(
-    month as (typeof SPANISH_MONTHS)[number],
-  );
-  if (monthIndex === -1) return parseInt(year, 10);
-  return parseInt(year, 10) + monthIndex / 12;
 }
 
 /* ═════════════════════════════════════════════════════════════════
@@ -743,6 +720,8 @@ function parseSpanishDate(dateStr: string): number {
  * gracias al `gap-y-1.5` interno (no bloques separados).
  * ════════════════════════════════════════════════════════════════ */
 function EducationStrip() {
+  const t = useTranslations("Experience");
+  const { degrees, certifications } = useEducation();
   return (
     <RevealUp delay={0.1} className="mt-12 sm:mt-14 lg:mt-16">
       {/* Divider editorial con label centrado al medio */}
@@ -750,7 +729,7 @@ function EducationStrip() {
         <span aria-hidden className="rule-editorial-line" />
         <span className="mx-4 inline-flex items-center gap-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-subtle-foreground">
           <span aria-hidden className="size-1 rounded-full bg-[var(--accent)]" />
-          Formación
+          {t("educationLabel")}
         </span>
         <span aria-hidden className="rule-editorial-line" />
       </div>
@@ -759,7 +738,7 @@ function EducationStrip() {
        *  mobile: 1 col stacked (hairlines horizontales).
        *  sm+: 3 cols (hairlines verticales). */}
       <ul className="mt-10 grid grid-cols-1 gap-y-7 sm:mt-12 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-0 lg:gap-x-10">
-        {educationDegrees.map((entry, i) => (
+        {degrees.map((entry, i) => (
           <DegreeCell key={`${entry.degree}-${i}`} entry={entry} />
         ))}
       </ul>
@@ -769,7 +748,7 @@ function EducationStrip() {
        *  gap-y modesto para que se lean como cluster coherente,
        *  no como bloques distintos. */}
       <ul className="mt-9 flex flex-col gap-y-2 sm:mt-10 sm:gap-y-1.5">
-        {educationCertifications.map((entry, i) => (
+        {certifications.map((entry, i) => (
           <FootnoteRow
             key={`${entry.label}-${entry.degree}-${i}`}
             entry={entry}
@@ -883,6 +862,7 @@ function DegreeCell({ entry }: { entry: EducationEntry }) {
  * sigue siendo descargable manualmente desde la vista del browser.
  * ════════════════════════════════════════════════════════════════ */
 function ResumeCTA() {
+  const t = useTranslations("Experience");
   return (
     <RevealUp delay={0.15} className="mt-14 sm:mt-16 lg:mt-20">
       <div className="border-y border-foreground/10 py-9 sm:py-10">
@@ -898,22 +878,22 @@ function ResumeCTA() {
             )}
           >
             <FileText aria-hidden className="size-4" strokeWidth={2} />
-            Descargar CV completo
+            {t("resume.cta")}
           </Link>
 
           <p
             className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-mono text-[10.5px] uppercase tracking-[0.2em] text-subtle-foreground sm:text-[11px]"
-            aria-label="Metadata del archivo"
+            aria-label={t("resume.metaAriaLabel")}
           >
-            <span>PDF</span>
+            <span>{t("resume.format")}</span>
             <span aria-hidden className="text-foreground/25">
               ·
             </span>
-            <span>English</span>
+            <span>{t("resume.language")}</span>
             <span aria-hidden className="text-foreground/25">
               ·
             </span>
-            <span>Actualizado 2026</span>
+            <span>{t("resume.updated", { year: 2026 })}</span>
           </p>
         </div>
       </div>

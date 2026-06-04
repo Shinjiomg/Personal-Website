@@ -1,32 +1,84 @@
 /**
- * Experiencia profesional — fuente única de verdad para la sección
- * `<Experience />`. Datos editables sin tocar el componente.
+ * Experiencia profesional — metadata técnica (locale-independent).
+ *
+ * Esta fuente de verdad **NO contiene strings traducibles**. Los campos
+ * traducibles (role, summary, highlights) viven en `messages/<locale>.json`
+ * bajo el namespace `ExperienceData`, indexados por `id`. El hook
+ * `useExperienceJobs()` los compone en runtime con la locale activa.
  *
  * Convenciones:
- *   · Orden: del más reciente al más antiguo, por fecha de inicio.
- *     Trillium queda #01 (ongoing). DataScoring antes que Janover
- *     porque comparten Ene 2025 de inicio pero DataScoring terminó
- *     más tarde.
- *   · `start` / `end`: formato "Mmm AAAA" en español ("Ene 2025",
- *     "Feb 2026"). `end: "Presente"` marca rol activo.
- *   · `stack`: ordenado por prominencia en el job (no alfabético) —
- *     el primero es la tech principal. Máx ~5 entradas para no
- *     romper el visual de los chips en la lista.
- *   · `summary`: 1–2 líneas, lede editorial. Mencionar impacto
- *     concreto (% mejora, # proyectos, etc.) cuando aplique.
- *   · `highlights`: 3 items (idealmente) que se renderizan como
- *     metric strip — `value` corto y headline (mono o número),
- *     `label` mono uppercase con el contexto. No los uses como
- *     resumen — son headlines que el summary expande.
- *   · `url`: opcional — si la empresa/producto tiene web pública
- *     el componente puede renderizar un link-out (no usado por
- *     defecto en esta iteración para mantener la lista limpia).
+ *   · `id`: slug estable usado para indexar los messages (NO renombrar
+ *     sin actualizar `messages/es.json` + `messages/en.json`).
+ *   · `start` / `end`: ISO `YYYY-MM` (mes-año). `end: null` marca rol
+ *     activo (el componente muestra "Presente" / "Present" según locale).
+ *   · `stack`: nombres de tech — universales, no se traducen.
+ *   · `company`: nombre propio — universal, no se traduce.
+ *   · `url`: opcional, link a la empresa/producto.
+ *
+ * El orden del array define el orden visual (más reciente arriba).
  */
+export type ExperienceJobMeta = {
+  readonly id: string;
+  readonly company: string;
+  readonly start: string;
+  readonly end: string | null;
+  readonly stack: readonly string[];
+  readonly url?: string;
+};
+
+export const experienceMeta: readonly ExperienceJobMeta[] = [
+  {
+    id: "trillium",
+    company: "Trillium Digital Services",
+    start: "2026-02",
+    end: null,
+    stack: ["React", "Microfrontends", "REST APIs"],
+  },
+  {
+    id: "datascoring",
+    company: "DataScoring",
+    start: "2025-01",
+    end: "2026-03",
+    stack: ["Angular", "TypeScript", "RxJS", "REST APIs"],
+  },
+  {
+    id: "janover",
+    company: "Janover Ventures",
+    start: "2025-01",
+    end: "2026-01",
+    stack: ["Vue", "Nuxt", "Astro", "Hygraph", "SEO"],
+  },
+  {
+    id: "vmo",
+    company: "VMO Central SAS",
+    start: "2023-05",
+    end: "2024-02",
+    stack: ["Angular", "TypeScript", "SASS", "REST APIs"],
+  },
+  {
+    id: "freelance",
+    company: "Freelance",
+    start: "2022-02",
+    end: "2024-06",
+    stack: ["React", "Vue", "PHP", "HTML/CSS", "Unity"],
+  },
+] as const;
+
+/* Shape "rica" del job una vez compuesto con la locale activa.
+ * Es lo que el componente <Experience /> consume y lo que el hook
+ * `useExperienceJobs()` devuelve. */
 export type ExperienceJob = {
+  readonly id: string;
   readonly company: string;
   readonly role: string;
+  /** Fecha de inicio formateada según locale (ej. "Ene 2025" / "Jan 2025"). */
   readonly start: string;
+  /** Fecha de fin formateada o label "Presente" / "Present" si está activo. */
   readonly end: string;
+  /** Inicio en años fraccionales (2025.0 para enero 2025) — para charts. */
+  readonly startFraction: number;
+  /** Fin en años fraccionales. `null` se resuelve a "ahora". */
+  readonly endFraction: number;
   readonly stack: readonly string[];
   readonly summary: string;
   readonly url?: string;
@@ -35,76 +87,3 @@ export type ExperienceJob = {
     readonly label: string;
   }[];
 };
-
-export const experience: readonly ExperienceJob[] = [
-  {
-    company: "Trillium Digital Services",
-    role: "Frontend Developer",
-    start: "Feb 2026",
-    end: "Presente",
-    stack: ["React", "Microfrontends", "REST APIs"],
-    summary:
-      "Microfrontends con React y consumo de APIs internas para features nuevos. Lidero al equipo frontend manteniendo código limpio y buenas prácticas en la UI interna.",
-    highlights: [
-      { value: "Lead", label: "Del frontend team" },
-      { value: "React 19", label: "Stack principal" },
-      { value: "Remote", label: "Equipo en US" },
-    ],
-  },
-  {
-    company: "DataScoring",
-    role: "Angular Frontend Developer",
-    start: "Ene 2025",
-    end: "Mar 2026",
-    stack: ["Angular", "TypeScript", "RxJS", "REST APIs"],
-    summary:
-      "Migración progresiva de una plataforma legacy a Angular — aporté +90% del trabajo de migración, mejorando significativamente page speed, UX y tiempo de mantenimiento.",
-    highlights: [
-      { value: "+90%", label: "De la migración" },
-      { value: "Angular", label: "Legacy → moderno" },
-      { value: "14m", label: "Duración total" },
-    ],
-  },
-  {
-    company: "Janover Ventures",
-    role: "Web Developer · Technical SEO",
-    start: "Ene 2025",
-    end: "Ene 2026",
-    stack: ["Vue", "Nuxt", "Astro", "Hygraph", "SEO"],
-    summary:
-      "Componentes Vue/Nuxt y landings en Astro con Hygraph (headless CMS). A/B testing con producto y SEO técnico — metadata estructurada, sitemaps dinámicos y robots.",
-    highlights: [
-      { value: "A/B", label: "Tests con producto" },
-      { value: "SEO", label: "Técnico avanzado" },
-      { value: "Multi", label: "Vue · Nuxt · Astro" },
-    ],
-  },
-  {
-    company: "VMO Central SAS",
-    role: "Angular Web Developer",
-    start: "May 2023",
-    end: "Feb 2024",
-    stack: ["Angular", "TypeScript", "SASS", "REST APIs"],
-    summary:
-      "Componentes reusables, integración de APIs REST y diseño responsive/accesible. Mejoré el rendimiento de la aplicación en ~20% optimizando código y recursos.",
-    highlights: [
-      { value: "+20%", label: "Performance mejorada" },
-      { value: "Angular", label: "+ SASS + APIs" },
-      { value: "10m", label: "Duración" },
-    ],
-  },
-  {
-    company: "Freelance",
-    role: "Web Developer",
-    start: "Feb 2022",
-    end: "Jun 2024",
-    stack: ["React", "Vue", "PHP", "HTML/CSS", "Unity"],
-    summary:
-      "Sitios a medida con React, Vue y PHP, más videojuegos 2D en Unity y GameMaker Studio 2. 5 proyectos web entregados con alta satisfacción de cliente.",
-    highlights: [
-      { value: "5+", label: "Proyectos web" },
-      { value: "Multi", label: "React · Vue · PHP" },
-      { value: "Juegos 2D", label: "Unity · GameMaker" },
-    ],
-  },
-] as const;

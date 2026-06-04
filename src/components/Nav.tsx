@@ -5,8 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, Menu, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Logo } from "./Logo";
+import { LocaleSwitch } from "./LocaleSwitch";
 import { buttonVariants } from "@/components/ui/button";
 import { navLinks, type NavLink } from "@/data/navigation";
 import { useOnepageNavigation } from "@/hooks/useOnepageNavigation";
@@ -33,6 +35,8 @@ import { cn } from "@/lib/utils";
  *  - Mobile: drawer right-side con AnimatePresence + body lock.
  */
 export function Nav() {
+  const t = useTranslations("Nav");
+  const tCommon = useTranslations("Common");
   const pathname = usePathname();
   const { activeId } = useOnepageNavigation();
   const [scrolled, setScrolled] = useState(false);
@@ -94,7 +98,7 @@ export function Nav() {
 
           {/* Desktop nav — texto suelto, sin pills. */}
           <nav
-            aria-label="Navegación principal"
+            aria-label={t("ariaLabel")}
             className="hidden lg:block"
           >
             <ul className="flex items-center gap-9">
@@ -102,6 +106,7 @@ export function Nav() {
                 <NavItem
                   key={link.href}
                   link={link}
+                  label={t(`items.${link.key}`)}
                   activeId={activeId}
                 />
               ))}
@@ -109,6 +114,11 @@ export function Nav() {
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Locale switch — `ES | EN`. Desktop only en este slot
+                para no encimarlo con el CTA en mobile/tablet (donde el
+                drawer tiene su propio switch en el footer interno). */}
+            <LocaleSwitch className="hidden lg:inline-flex" />
+
             {/* CTA primaria — al anchor #contacto. Interceptada por
                 la delegación. En scrolled bajamos a size="sm" para
                 acompañar la compresión del row. */}
@@ -119,7 +129,7 @@ export function Nav() {
                 "hidden sm:inline-flex",
               )}
             >
-              Hablemos
+              {tCommon("ctaTalk")}
               <ArrowUpRight aria-hidden />
             </Link>
 
@@ -127,7 +137,7 @@ export function Nav() {
             <button
               type="button"
               onClick={() => setMenuOpen((v) => !v)}
-              aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+              aria-label={menuOpen ? t("closeMenuLabel") : t("openMenuLabel")}
               aria-expanded={menuOpen}
               aria-controls="site-mobile-drawer"
               className={cn(
@@ -197,7 +207,7 @@ export function Nav() {
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
               className="fixed right-0 top-0 z-50 flex h-dvh w-[min(360px,92vw)] flex-col border-l border-border bg-background shadow-2xl lg:hidden"
-              aria-label="Menú"
+              aria-label={t("drawerAriaLabel")}
             >
               <div className="flex h-[68px] items-center justify-between border-b border-border px-5">
                 {/* onClick acá sólo cierra el drawer — el scroll lo
@@ -210,7 +220,7 @@ export function Nav() {
                 <button
                   type="button"
                   onClick={() => setMenuOpen(false)}
-                  aria-label="Cerrar menú"
+                  aria-label={t("closeMenuLabel")}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-full text-foreground/60 transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
                 >
                   <X className="h-4 w-4" />
@@ -220,7 +230,7 @@ export function Nav() {
               {/* Drawer body — links grandes en Fraunces. Más vibe
                   editorial que el patrón "lista compacta" típico. */}
               <nav
-                aria-label="Navegación principal"
+                aria-label={t("ariaLabel")}
                 className="flex-1 overflow-y-auto px-5 py-6"
               >
                 <ul className="flex flex-col gap-1">
@@ -239,7 +249,7 @@ export function Nav() {
                           className="group flex items-baseline justify-between gap-3 rounded-lg px-2 py-3 font-display text-[28px] font-medium leading-none tracking-[-0.02em] text-foreground transition-colors hover:text-foreground"
                         >
                           <span className="relative">
-                            {link.label}
+                            {t(`items.${link.key}`)}
                             <span
                               aria-hidden
                               className={cn(
@@ -270,15 +280,21 @@ export function Nav() {
                     "w-full",
                   )}
                 >
-                  Hablemos
+                  {tCommon("ctaTalk")}
                   <ArrowUpRight aria-hidden />
                 </Link>
+                {/* Locale switch dentro del drawer — alineado con el
+                    CTA y por encima del meta line, para que el cambio
+                    de idioma esté siempre a 1 tap del bottom-right thumb. */}
+                <div className="flex justify-center pt-1">
+                  <LocaleSwitch />
+                </div>
                 <p className="text-center text-[11px] text-subtle-foreground">
                   {siteConfig.location}
                   <span aria-hidden className="mx-1.5 text-foreground/25">
                     ·
                   </span>
-                  Respondo en menos de 24 h
+                  {tCommon("responseHint")}
                 </p>
               </div>
             </motion.aside>
@@ -298,9 +314,11 @@ export function Nav() {
  */
 function NavItem({
   link,
+  label,
   activeId,
 }: {
   link: NavLink;
+  label: string;
   activeId: string | null;
 }) {
   const active = activeId === link.href.slice(1);
@@ -315,7 +333,7 @@ function NavItem({
           active ? "text-foreground" : "text-foreground/65 hover:text-foreground",
         )}
       >
-        {link.label}
+        {label}
         <span
           aria-hidden
           className={cn(

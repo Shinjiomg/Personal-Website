@@ -1,0 +1,200 @@
+{
+  "assets": [
+    {
+      "path": "/",
+      "status": 200,
+      "size": 337806,
+      "ct": "text/html; charset=utf-8",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/opengraph-image",
+      "status": 200,
+      "size": 448048,
+      "ct": "image/png",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/icon.svg",
+      "status": 200,
+      "size": 616,
+      "ct": "image/svg+xml",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/icon.png",
+      "status": 200,
+      "size": 3560,
+      "ct": "image/png",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/apple-icon.png",
+      "status": 200,
+      "size": 3694,
+      "ct": "image/png",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/manifest.webmanifest",
+      "status": 200,
+      "size": 561,
+      "ct": "application/manifest+json; charset=utf-8",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "size": 346,
+      "ct": "text/plain; charset=utf-8",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "size": 280,
+      "ct": "application/xml",
+      "cache": "public, max-age=0, must-revalidate"
+    }
+  ],
+  "meta": {
+    "title": "Jhonatan Becerra · Desarrollador Frontend",
+    "canonical": "https://jhonatanbecerra-portfolio.vercel.app",
+    "lang": "es-CO",
+    "charset": "utf-8",
+    "viewport": "width=device-width, initial-scale=1, maximum-scale=5",
+    "themeColor": "#FAFAF8",
+    "description": "Desarrollador frontend con más de 3 años construyendo interfaces que se sienten bien y se mantienen mejor. Especializado en Next.js, Angular y TypeScript.",
+    "og": [
+      {
+        "property": "og:title",
+        "content": "Jhonatan Becerra · Desarrollador Frontend"
+      },
+      {
+        "property": "og:description",
+        "content": "Desarrollador frontend con más de 3 años construyendo interfaces que se sienten bien y se mantienen mejor. Especializado en Next.js, Angular y TypeScript."
+      },
+      {
+        "property": "og:url",
+        "content": "https://jhonatanbecerra-portfolio.vercel.app"
+      },
+      {
+        "property": "og:site_name",
+        "content": "Jhonatan Becerra"
+      },
+      {
+        "property": "og:locale",
+        "content": "es_CO"
+      },
+      {
+        "property": "og:image",
+        "content": "https://jhonatanbecerra-portfolio.vercel.app/opengraph-image?63db07f7ac295f39"
+      },
+      {
+        "property": "og:image:type",
+        "content": "image/png"
+      },
+      {
+        "property": "og:image:width",
+        "content": "1200"
+      },
+      {
+        "property": "og:image:height",
+        "content": "630"
+      },
+      {
+        "property": "og:image:alt",
+        "content": "Jhonatan Becerra — Desarrollador Frontend"
+      },
+      {
+        "property": "og:type",
+        "content": "website"
+      }
+    ],
+    "twitter": [
+      {
+        "name": "twitter:card",
+        "content": "summary_large_image"
+      },
+      {
+        "name": "twitter:title",
+        "content": "Jhonatan Becerra · Desarrollador Frontend"
+      },
+      {
+        "name": "twitter:description",
+        "content": "Desarrollador frontend con más de 3 años construyendo interfaces que se sienten bien y se mantienen mejor. Especializado en Next.js, Angular y TypeScript."
+      },
+      {
+        "name": "twitter:image",
+        "content": "https://jhonatanbecerra-portfolio.vercel.app/opengraph-image?63db07f7ac295f39"
+      },
+      {
+        "name": "twitter:image:alt",
+        "content": "Jhonatan Becerra — Desarrollador Frontend"
+      },
+      {
+        "name": "twitter:image:type",
+        "content": "image/png"
+      },
+      {
+        "name": "twitter:image:width",
+        "content": "1200"
+      },
+      {
+        "name": "twitter:image:height",
+        "content": "630"
+      }
+    ],
+    "icons": [
+      {
+        "rel": "icon",
+        "href": "/icon.png?icon.3a5hq7e7ibe2y.png",
+        "sizes": "256x256",
+        "type": "image/png"
+      },
+      {
+        "rel": "icon",
+        "href": "/icon.svg?icon.1bysfx39g6zs7.svg",
+        "sizes": "any",
+        "type": "image/svg+xml"
+      },
+      {
+        "rel": "apple-touch-icon",
+        "href": "/apple-icon.png?apple-icon.1pu4aluwcmn-r.png",
+        "sizes": "180x180",
+        "type": "image/png"
+      }
+    ],
+    "jsonLd": [
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Jhonatan Becerra",
+        "jobTitle": "Desarrollador Frontend",
+        "url": "https://jhonatanbecerra-portfolio.vercel.app",
+        "email": "yonkitas9@gmail.com",
+        "telephone": "+573015703750",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "CO",
+          "addressLocality": "Bogotá"
+        },
+        "sameAs": [
+          "https://github.com/shinjiomg",
+          "https://www.linkedin.com/in/jhonatandavidbecerradonado-frontend/"
+        ],
+        "knowsAbout": [
+          "Next.js",
+          "Angular",
+          "TypeScript",
+          "React",
+          "Tailwind CSS",
+          "SASS",
+          "Node.js",
+          "Vercel"
+        ]
+      }
+    ]
+  },
+  "issues": []
+}

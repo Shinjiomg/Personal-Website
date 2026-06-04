@@ -14,17 +14,17 @@ import {
 } from "lucide-react";
 import {
   useCallback,
-  useEffect,
   useId,
   useRef,
   useState,
   type FormEvent,
 } from "react";
+import { useTranslations } from "next-intl";
 import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { buttonVariants } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
-import { contactLinks } from "@/lib/contact-links";
+import { useContactLinks } from "@/lib/contact-links";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
@@ -94,6 +94,7 @@ import { cn } from "@/lib/utils";
  *     USA — `tú` es la elección de menor fricción.
  * ════════════════════════════════════════════════════════════════ */
 export function Contact() {
+  const t = useTranslations("Contact");
   return (
     <section
       id="contacto"
@@ -130,24 +131,22 @@ export function Contact() {
         <div className="grid grid-cols-1 gap-y-10 md:grid-cols-12 md:items-start md:gap-x-10 md:gap-y-0 lg:gap-x-16">
           {/* ── Block 1 · Header ── */}
           <RevealUp className="order-1 md:col-span-6 md:row-start-1 lg:col-span-7">
-            <Eyebrow>Contacto</Eyebrow>
+            <Eyebrow>{t("eyebrow")}</Eyebrow>
 
             <h2 className="mt-6 font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.04] tracking-[-0.028em] text-foreground-strong text-balance">
-              Hablemos de tu{" "}
+              {t("headlineLead")}{" "}
               <em className="italic font-normal text-foreground/75">
-                próximo
+                {t("headlineHighlight")}
               </em>{" "}
-              proyecto.
+              {t("headlineTrail")}
             </h2>
 
             <p className="mt-7 max-w-xl text-[16.5px] leading-relaxed text-muted-foreground sm:text-[17.5px]">
-              Estoy abierto a colaborar en productos web, migraciones
-              a Next.js o Angular, plataformas SaaS y landings de
-              alto impacto. Si tienes algo en mente —{" "}
-              <span className="text-foreground/80">
-                corporativo, startup o personal
-              </span>{" "}
-              — cuéntame y vemos cómo encaja.
+              {t.rich("intro", {
+                s: (chunks) => (
+                  <span className="text-foreground/80">{chunks}</span>
+                ),
+              })}
             </p>
           </RevealUp>
 
@@ -186,7 +185,7 @@ export function Contact() {
                 aria-hidden
                 className="size-1.5 rounded-full bg-[var(--accent)]"
               />
-              Hasta pronto
+              {t("closingLabel")}
             </span>
             <span aria-hidden className="rule-editorial-line" />
           </div>
@@ -288,6 +287,8 @@ type ContactApiResponse =
   | { ok: false; error: string };
 
 function ContactForm() {
+  const t = useTranslations("Contact.form");
+  const tErrors = useTranslations("Contact.form.errors");
   const formRef = useRef<HTMLFormElement>(null);
   const [state, setState] = useState<SubmitState>({ status: "idle" });
 
@@ -333,7 +334,7 @@ function ContactForm() {
             );
             setState({
               status: "error",
-              message: `Espera ${remainingSec}s antes de enviar otro mensaje.`,
+              message: tErrors("cooldown", { seconds: remainingSec }),
             });
             return;
           }
@@ -376,7 +377,9 @@ function ContactForm() {
         try {
           body = (await res.json()) as ContactApiResponse;
         } catch {
-          throw new Error(`Respuesta inválida del servidor (HTTP ${res.status})`);
+          throw new Error(
+            tErrors("invalidResponse", { status: res.status }),
+          );
         }
 
         if (!res.ok || !body.ok) {
@@ -385,7 +388,7 @@ function ContactForm() {
           const message =
             body.ok === false && body.error
               ? body.error
-              : "No pude enviar el mensaje. Prueba de nuevo en un momento.";
+              : tErrors("serverFallback");
           throw new Error(message);
         }
 
@@ -409,11 +412,11 @@ function ContactForm() {
           message:
             err instanceof Error
               ? err.message
-              : "No pude enviar el mensaje. Prueba de nuevo o escríbeme al email de abajo.",
+              : tErrors("networkFallback"),
         });
       }
     },
-    [],
+    [tErrors],
   );
 
   const isSending = state.status === "sending";
@@ -430,7 +433,7 @@ function ContactForm() {
       {/* Eyebrow del card */}
       <p className="flex items-center gap-3 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-subtle-foreground">
         <span aria-hidden className="h-px w-6 bg-foreground/25" />
-        Escríbeme
+        {t("eyebrow")}
       </p>
 
       {/* Honeypot — invisible para humanos (display none + tabindex
@@ -443,9 +446,7 @@ function ContactForm() {
        *  señala "campo de sistema, no llenar" para autofill heurístico
        *  y para humanos que inspeccionen el DOM. */}
       <div aria-hidden className="hidden">
-        <label htmlFor={honeypotId}>
-          No completes este campo si eres humano
-        </label>
+        <label htmlFor={honeypotId}>{t("honeypotLabel")}</label>
         <input
           id={honeypotId}
           type="text"
@@ -458,42 +459,42 @@ function ContactForm() {
       {/* Campos visibles */}
       <div className="mt-6 grid gap-5">
         <FieldGroup>
-          <FieldLabel htmlFor={nameId}>Nombre</FieldLabel>
+          <FieldLabel htmlFor={nameId}>{t("nameLabel")}</FieldLabel>
           <FieldInput
             id={nameId}
             name="name"
             type="text"
             required
             autoComplete="name"
-            placeholder="Tu nombre"
+            placeholder={t("namePlaceholder")}
             disabled={isSending}
             onFocus={handleFocusReset}
           />
         </FieldGroup>
 
         <FieldGroup>
-          <FieldLabel htmlFor={emailId}>Correo</FieldLabel>
+          <FieldLabel htmlFor={emailId}>{t("emailLabel")}</FieldLabel>
           <FieldInput
             id={emailId}
             name="email"
             type="email"
             required
             autoComplete="email"
-            placeholder="hola@tudominio.com"
+            placeholder={t("emailPlaceholder")}
             disabled={isSending}
             onFocus={handleFocusReset}
           />
         </FieldGroup>
 
         <FieldGroup>
-          <FieldLabel htmlFor={messageId}>Mensaje</FieldLabel>
+          <FieldLabel htmlFor={messageId}>{t("messageLabel")}</FieldLabel>
           <textarea
             id={messageId}
             name="message"
             required
             minLength={10}
             rows={6}
-            placeholder="Cuéntame el contexto, qué necesitas y plazos si aplica."
+            placeholder={t("messagePlaceholder")}
             disabled={isSending}
             onFocus={handleFocusReset}
             className={cn(
@@ -530,12 +531,12 @@ function ContactForm() {
           {isSending ? (
             <>
               <Loader2 aria-hidden className="size-4 animate-spin" />
-              Enviando…
+              {t("submitPending")}
             </>
           ) : (
             <>
               <Send aria-hidden className="size-4" />
-              Enviar mensaje
+              {t("submit")}
               <ArrowUpRight aria-hidden />
             </>
           )}
@@ -554,15 +555,15 @@ function ContactForm() {
             <FeedbackBlock
               tone="success"
               icon={CheckCircle2}
-              title="Mensaje enviado"
-              body="Gracias por contactarme. Responderé lo antes posible."
+              title={t("success.title")}
+              body={t("success.body")}
             />
           )}
           {isError && (
             <FeedbackBlock
               tone="error"
               icon={AlertCircle}
-              title="No se pudo enviar"
+              title={tErrors("title")}
               body={state.message}
             />
           )}
@@ -583,9 +584,7 @@ function ContactForm() {
       <div className="mt-5 border-t border-foreground/8 pt-4">
         <p className="flex items-center gap-2 text-[12.5px] leading-relaxed text-subtle-foreground">
           <Lock aria-hidden className="size-3.5 shrink-0 text-foreground/40" strokeWidth={2} />
-          <span>
-            Sólo me llega a mí. Sin newsletters ni auto-replies.
-          </span>
+          <span>{t("privacyHint")}</span>
         </p>
       </div>
     </form>
@@ -707,10 +706,13 @@ function FeedbackBlock({
  *   de outreach comercial.
  * ──────────────────────────────────────────────────────────────── */
 function ContactChannels() {
+  const t = useTranslations("Contact");
+  const tChannels = useTranslations("Channels");
+  const contactLinks = useContactLinks();
   const channels = [
     {
       id: "email",
-      label: "Email",
+      label: tChannels("email"),
       value: siteConfig.contact.email,
       href: contactLinks.email,
       icon: Mail,
@@ -718,7 +720,7 @@ function ContactChannels() {
     },
     {
       id: "whatsapp",
-      label: "WhatsApp",
+      label: tChannels("whatsapp"),
       value: siteConfig.contact.whatsappDisplay,
       href: contactLinks.whatsapp,
       icon: WhatsAppIcon,
@@ -726,7 +728,7 @@ function ContactChannels() {
     },
     {
       id: "linkedin",
-      label: "LinkedIn",
+      label: tChannels("linkedin"),
       value: siteConfig.social.linkedinHandle,
       href: contactLinks.linkedin,
       icon: LinkedInIcon,
@@ -738,7 +740,7 @@ function ContactChannels() {
     <div>
       <p className="flex items-center gap-3 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-subtle-foreground">
         <span aria-hidden className="h-px w-6 bg-foreground/25" />
-        Canales directos
+        {t("channelsLabel")}
       </p>
 
       <ul className="mt-5 divide-y divide-foreground/10">
@@ -817,6 +819,7 @@ function ContactChannels() {
  *   contexto abajo, jerarquía clara.
  * ──────────────────────────────────────────────────────────────── */
 function StatusStrip() {
+  const t = useTranslations("Contact.status");
   return (
     <div>
       {/* Header centrado tipo section-divider · hairlines a los
@@ -825,26 +828,33 @@ function StatusStrip() {
        *  band horizontal, no parte de una columna. */}
       <div className="flex items-center justify-center gap-3 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-subtle-foreground">
         <span aria-hidden className="h-px flex-1 max-w-[120px] bg-foreground/15" />
-        <span>Dónde estoy</span>
+        <span>{t("heading")}</span>
         <span aria-hidden className="h-px flex-1 max-w-[120px] bg-foreground/15" />
       </div>
 
       <ul className="mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-y-6 sm:mt-10 md:grid-cols-3 md:gap-x-8 md:gap-y-0 lg:gap-x-12">
         <StatusCell
-          label="Ubicación"
-          meta="UTC−5"
+          label={t("location.label")}
+          meta={t("location.meta")}
           first
           icon={MapPin}
         >
           {siteConfig.location}
         </StatusCell>
 
-        <StatusCell label="Disponibilidad" meta="A proyectos" withDot>
-          Abierto
+        <StatusCell
+          label={t("availability.label")}
+          meta={t("availability.meta")}
+          withDot
+        >
+          {t("availability.value")}
         </StatusCell>
 
-        <StatusCell label="Modalidad" meta="LATAM y USA">
-          Remoto
+        <StatusCell
+          label={t("modality.label")}
+          meta={t("modality.meta")}
+        >
+          {t("modality.value")}
         </StatusCell>
       </ul>
     </div>

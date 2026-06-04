@@ -41,13 +41,8 @@ export const siteConfig = {
   yearsOfExperience: 3,
   contact: {
     email: "yonkitas9@gmail.com",
-    emailSubject: "Hola Jhonatan",
-    emailBody:
-      "Hola Jhonatan,\n\nTe escribo porque:\n\n— Sobre mí / empresa:\n— Lo que necesito:\n— Plazos:\n\nGracias.",
     whatsapp: "+573015703750",
     whatsappDisplay: "+57 301 570 3750",
-    whatsappPrefill:
-      "Hola Jhonatan, vi tu portafolio y quería contactarte sobre un proyecto.",
   },
   social: {
     github: "https://github.com/shinjiomg",

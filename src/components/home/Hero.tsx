@@ -7,6 +7,7 @@ import {
   SiTailwindcss,
   SiTypescript,
 } from "react-icons/si";
+import { useTranslations } from "next-intl";
 
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { MarkerHighlight } from "@/components/ui/marker-highlight";
@@ -19,7 +20,7 @@ import {
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
 import { siteConfig } from "@/lib/site-config";
-import { contactLinks } from "@/lib/contact-links";
+import { useContactLinks } from "@/lib/contact-links";
 import { cn } from "@/lib/utils";
 
 /**
@@ -70,6 +71,11 @@ import { cn } from "@/lib/utils";
  *     son lenguajes ni frameworks que el cliente compre).
  */
 export function Hero() {
+  const t = useTranslations("Hero");
+  const tCommon = useTranslations("Common");
+  const tChannels = useTranslations("Channels");
+  const contactLinks = useContactLinks();
+
   // Stack del marquee — sólo las tecnologías que el cliente
   // efectivamente está contratando. Vercel/Git/Vite son
   // herramientas de mi flujo, no del entregable, y diluyen.
@@ -84,19 +90,19 @@ export function Hero() {
 
   const directChannels = [
     {
-      label: "WhatsApp",
+      label: tChannels("whatsapp"),
       href: contactLinks.whatsapp,
       icon: WhatsAppIcon,
       external: true,
     },
     {
-      label: "Email",
+      label: tChannels("email"),
       href: contactLinks.email,
       icon: Mail,
       external: false,
     },
     {
-      label: "LinkedIn",
+      label: tChannels("linkedin"),
       href: contactLinks.linkedin,
       icon: LinkedInIcon,
       external: true,
@@ -129,31 +135,31 @@ export function Hero() {
                       aria-hidden
                       className="mx-1 inline-block h-[10px] w-px bg-foreground/20 align-middle"
                     />
-                    <span className="text-foreground/85">Disponible</span>
+                    <span className="text-foreground/85">{t("availability")}</span>
                   </>
                 )}
               </Eyebrow>
             </div>
 
             <h1 className="mt-6 font-display text-[clamp(2.6rem,7vw,5rem)] leading-[1.02] tracking-[-0.035em] text-foreground-strong">
-              Hola, soy{" "}
+              {t("greeting")}{" "}
               <em className="italic font-normal text-foreground/85">
-                {siteConfig.shortName}
+                {t("name")}
               </em>
               .
               <br />
-              Desarrollador{" "}
-              <MarkerHighlight>Frontend</MarkerHighlight>.
+              {t("rolePrefix")}{" "}
+              <MarkerHighlight>{t("roleHighlight")}</MarkerHighlight>.
             </h1>
 
             <p className="mx-auto mt-7 max-w-xl text-[17px] leading-relaxed text-muted-foreground sm:text-[18px] lg:mx-0">
-              Aplicaciones web escalables y de alto rendimiento en{" "}
-              <strong className="font-semibold text-foreground">Angular</strong>,{" "}
-              <strong className="font-semibold text-foreground">TypeScript</strong>,{" "}
-              <strong className="font-semibold text-foreground">Next.js</strong> y{" "}
-              <strong className="font-semibold text-foreground">Tailwind</strong>.
-              Arquitectura modular, integración con APIs y migración de
-              plataformas — colaborando con equipos remotos en US.
+              {t.rich("subhead", {
+                s: (chunks) => (
+                  <strong className="font-semibold text-foreground">
+                    {chunks}
+                  </strong>
+                ),
+              })}
             </p>
 
             {/* CTAs principales */}
@@ -162,7 +168,7 @@ export function Hero() {
                 href="#contacto"
                 className={cn(buttonVariants({ variant: "ink", size: "xl" }))}
               >
-                Hablemos
+                {tCommon("ctaTalk")}
                 <ArrowUpRight aria-hidden />
               </Link>
               <Link
@@ -170,7 +176,7 @@ export function Hero() {
                 className={cn(buttonVariants({ variant: "outline", size: "xl" }))}
               >
                 <FolderOpen aria-hidden />
-                Ver portafolio
+                {t("ctaSecondary")}
               </Link>
             </div>
 
@@ -180,7 +186,7 @@ export function Hero() {
                 ocultan en mobile (gana ruido) y aparecen desde sm+. */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2.5 text-[13.5px] text-muted-foreground lg:justify-start">
               <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-subtle-foreground">
-                O directo en
+                {t("channelsLead")}
               </span>
               {directChannels.map((channel) => {
                 const Icon = channel.icon;
@@ -207,7 +213,7 @@ export function Hero() {
                 className="hidden h-3 w-px bg-foreground/15 sm:inline-block"
               />
               <span className="hidden text-[12px] italic text-subtle-foreground sm:inline">
-                respondo en menos de 24 h hábiles
+                {t("responseHint")}
               </span>
             </div>
           </div>
@@ -233,11 +239,11 @@ export function Hero() {
       <div className="container-site mt-10 flex justify-center sm:mt-14">
         <a
           href="#sobre-mi"
-          aria-label="Continuar a Sobre mí"
+          aria-label={t("scrollCueAriaLabel")}
           className="group inline-flex flex-col items-center gap-2 text-subtle-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
         >
           <span className="text-[10.5px] font-semibold uppercase tracking-[0.22em]">
-            seguir
+            {t("scrollCueLabel")}
           </span>
           <ChevronDown
             aria-hidden

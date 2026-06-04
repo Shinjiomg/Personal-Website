@@ -3,26 +3,46 @@ import localFont from "next/font/local";
 import { Fraunces } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { getLocale } from "next-intl/server";
 
-import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/Footer";
-import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { siteConfig } from "@/lib/site-config";
 
 import "./globals.css";
 
 /**
- * Pareja tipográfica:
- *  - Body / UI: Satoshi (sans humanista geométrica) self-hosted en
- *    `public/fonts/satoshi/`. 4 pesos en .woff2 (~100KB total).
- *  - Display: Fraunces (serif variable) servida vía `next/font/google`.
- *    Next 16 la self-hostea en build, sin request a Google en runtime
- *    — cumple GDPR sin tener que descargar las .woff2 a mano.
- *    Axes activos: SOFT (rasgos amables) + opsz (tamaño óptico).
+ * Root layout · `app/layout.tsx`
  *
- * Ambas se exponen como variables CSS (`--font-satoshi`, `--font-fraunces`)
- * y se consumen desde `globals.css` (`--font-sans`, `--font-display`).
+ * Responsabilidades (compartidas con TODOS los locales y con 404s
+ * que caen fuera de un segmento `[locale]`):
+ *   · Cargar fuentes globales (Satoshi local + Fraunces de Google)
+ *     y exponerlas como CSS variables en `<html>`.
+ *   · Importar `globals.css` (tokens, base styles, animations).
+ *   · Montar `<html lang>` con el locale activo resuelto por
+ *     `getLocale()` — i18n-aware sin necesidad de propagar el
+ *     prop desde cada page.
+ *   · Inyectar Vercel Analytics + Speed Insights (globales).
+ *
+ * Lo que NO vive acá (vive en `[locale]/layout.tsx`):
+ *   · Nav, Footer, WhatsAppFab — necesitan strings traducidas
+ *   · NextIntlClientProvider — solo aplica dentro de un locale
+ *   · JSON-LD Person — `inLanguage` cambia por locale
+ *   · `generateMetadata` con title/description/OG — locale-aware
+ *
+ * Por qué `getLocale()` y no `useLocale()`:
+ *   Root layout corre en server. `useLocale()` es para client
+ *   components. `getLocale()` también funciona FUERA del segmento
+ *   `[locale]` (cae a defaultLocale del routing config) → el 404
+ *   global de un path inválido todavía renderea `<html lang="es">`.
+ *
+ * Pareja tipográfica:
+ *   · Body / UI · Satoshi (sans humanista geométrica), self-hosted
+ *     en `public/fonts/satoshi/`. 4 pesos en .woff2 (~100 KB total).
+ *   · Display · Fraunces (serif variable) vía `next/font/google`.
+ *     Next 16 la self-hostea en build, sin request a Google en
+ *     runtime — cumple GDPR sin tener que descargar .woff2 a mano.
+ *     Axes activos: SOFT (rasgos amables) + opsz (tamaño óptico).
  */
+
 const satoshi = localFont({
   variable: "--font-satoshi",
   display: "swap",
@@ -50,43 +70,16 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+/* Metadata global · solo lo que no varía por locale.
+ * El `title`, `description`, `openGraph`, `twitter` y `alternates`
+ * son emitidos por `generateMetadata` en `[locale]/layout.tsx`. */
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: {
-    default: `${siteConfig.name} · ${siteConfig.tagline}`,
-    template: `%s · ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
   applicationName: siteConfig.name,
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   creator: siteConfig.name,
   publisher: siteConfig.name,
-  keywords: [
-    "Jhonatan Becerra",
-    "desarrollador frontend",
-    "Next.js",
-    "Angular",
-    "TypeScript",
-    "React",
-    "frontend Colombia",
-    "frontend Bogotá",
-    "portafolio frontend",
-  ],
   formatDetection: { telephone: false, email: false, address: false },
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    locale: "es_CO",
-    url: siteConfig.url,
-    title: `${siteConfig.name} · ${siteConfig.tagline}`,
-    description: siteConfig.description,
-    siteName: siteConfig.name,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${siteConfig.name} · ${siteConfig.tagline}`,
-    description: siteConfig.description,
-  },
   robots: {
     index: true,
     follow: true,
@@ -101,67 +94,21 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
-/**
- * JSON-LD Person — vive inline en el layout (no en `lib/schema`)
- * porque por ahora es el único schema del sitio. Cuando aparezcan
- * Article (insights) o CreativeWork (casos del portafolio),
- * extraer a `lib/schema.tsx` siguiendo el patrón del playbook §5.
- */
-const personSchema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: siteConfig.name,
-  jobTitle: siteConfig.tagline,
-  url: siteConfig.url,
-  email: siteConfig.contact.email,
-  telephone: siteConfig.contact.whatsapp,
-  address: {
-    "@type": "PostalAddress",
-    addressCountry: "CO",
-    addressLocality: "Bogotá",
-  },
-  sameAs: [siteConfig.social.github, siteConfig.social.linkedin],
-  knowsAbout: [
-    ...siteConfig.stack.primary,
-    ...siteConfig.stack.styling,
-    ...siteConfig.stack.runtime,
-  ],
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const locale = await getLocale();
   return (
     <html
-      lang={siteConfig.locale}
+      lang={locale}
       className={`${satoshi.variable} ${fraunces.variable}`}
       // Next 16 quita `scroll-behavior: smooth` durante las route
       // transitions cuando este atributo está presente, evitando
       // animar el viewport completo en cada navegación interna.
       data-scroll-behavior="smooth"
     >
-      <head>
-        <script
-          type="application/ld+json"
-          // Pre-serializado: JSON.stringify es seguro acá, no hay
-          // datos provenientes del usuario en `personSchema`.
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
-        />
-      </head>
       <body className="bg-background font-sans text-foreground antialiased">
-        <a href="#contenido" className="skip-link skip-link-focus">
-          Saltar al contenido
-        </a>
-
-        <Nav />
-        <main id="contenido">{children}</main>
-        <Footer />
-
-        {/* FAB de WhatsApp — sticky bottom-right. Se auto-oculta
-            cuando #contacto está en view o un Dialog/drawer abre el
-            body-scroll-lock. Vive al final del DOM (no afecta el
-            tab-order del header/main). */}
-        <WhatsAppFab />
+        {children}
 
         <Analytics />
         <SpeedInsights />

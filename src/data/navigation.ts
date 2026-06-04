@@ -9,19 +9,27 @@
  * mantener TODO bajo el home permite que el scroll-spy del Nav
  * funcione sin condicionales por `pathname`.
  *
- * `href` está tipado como `#${string}` para que el compiler bloquee
- * accidentalmente agregar una ruta absoluta acá.
+ * i18n note:
+ *   Los IDs de sección (`#sobre-mi`, `#experiencia`, etc.) se
+ *   mantienen en español para AMBOS locales. No aparecen en la
+ *   URL (el `useOnepageNavigation` los strippea), funcionan solo
+ *   como anchors internos. Mantenerlos en una sola convención
+ *   evita tener que rehacer todo el scroll-spy + section IDs
+ *   por cada locale extra. Cambia `label` por `key` que mapea al
+ *   namespace `Nav.items.*` en `messages/*.json`.
  */
+export type NavLinkKey = "about" | "experience" | "portfolio" | "contact";
+
 export type NavLink = {
   readonly href: `#${string}`;
-  readonly label: string;
+  readonly key: NavLinkKey;
 };
 
 export const navLinks: readonly NavLink[] = [
-  { href: "#sobre-mi", label: "Sobre mí" },
-  { href: "#experiencia", label: "Experiencia" },
-  { href: "#portafolio", label: "Portafolio" },
-  { href: "#contacto", label: "Contacto" },
+  { href: "#sobre-mi", key: "about" },
+  { href: "#experiencia", key: "experience" },
+  { href: "#portafolio", key: "portfolio" },
+  { href: "#contacto", key: "contact" },
 ] as const;
 
 /**
@@ -32,15 +40,3 @@ export const navLinks: readonly NavLink[] = [
 export const sectionIds: readonly string[] = navLinks.map((l) =>
   l.href.slice(1),
 );
-
-/**
- * Footer comparte la misma fuente de verdad. Usar los mismos hrefs
- * que `navLinks` asegura que el scroll-spy reaccione igual cuando
- * el usuario navega desde el footer.
- */
-export const footerSections = [
-  {
-    title: "Navegación",
-    links: navLinks.map((l) => ({ href: l.href, label: l.label })),
-  },
-] as const;

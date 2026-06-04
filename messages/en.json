@@ -1,0 +1,433 @@
+{
+  "Metadata": {
+    "title": {
+      "default": "Jhonatan Becerra · Frontend Developer",
+      "template": "%s · Jhonatan Becerra"
+    },
+    "description": "Frontend developer with 3+ years building interfaces that feel good and age well. Specialized in Next.js, Angular, and TypeScript.",
+    "keywords": "Jhonatan Becerra | frontend developer | Next.js | Angular | TypeScript | React | frontend Colombia | LATAM frontend developer | portfolio",
+    "og": {
+      "title": "Jhonatan Becerra · Frontend Developer",
+      "description": "Frontend developer with 3+ years building interfaces that feel good and age well. Specialized in Next.js, Angular, and TypeScript."
+    }
+  },
+  "Layout": {
+    "skipToContent": "Skip to content",
+    "schema": {
+      "jobTitle": "Frontend Developer",
+      "description": "Frontend developer with 3+ years building interfaces that feel good and age well. Specialized in Next.js, Angular, and TypeScript."
+    }
+  },
+  "NotFound": {
+    "eyebrow": "Error 404",
+    "title": "This page doesn't exist.",
+    "description": "The link might be old or the page may have moved. Let's get back to solid ground.",
+    "backHome": "Back to home"
+  },
+  "Common": {
+    "ctaTalk": "Let's talk",
+    "responseHint": "I reply within 24 h",
+    "available": "Available for new projects"
+  },
+  "Channels": {
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "linkedin": "LinkedIn"
+  },
+  "Nav": {
+    "ariaLabel": "Main navigation",
+    "drawerAriaLabel": "Menu",
+    "openMenuLabel": "Open menu",
+    "closeMenuLabel": "Close menu",
+    "logoAriaLabel": "{name} — Home",
+    "items": {
+      "about": "About",
+      "experience": "Experience",
+      "portfolio": "Portfolio",
+      "contact": "Contact"
+    }
+  },
+  "Footer": {
+    "exploreLabel": "Explore",
+    "connectLabel": "Connect",
+    "cvLabel": "CV · PDF · EN",
+    "shortDescription": "I build interfaces that feel good and age well.",
+    "locationDescription": "From {location}, working with LATAM and US remote teams.",
+    "portraitAlt": "Portrait of {name}"
+  },
+  "WhatsAppFab": {
+    "ariaLabel": "Chat with me on WhatsApp",
+    "label": "WhatsApp"
+  },
+  "Hero": {
+    "availability": "Available",
+    "greeting": "Hi, I'm",
+    "name": "Jhonatan",
+    "rolePrefix": "Frontend",
+    "roleHighlight": "Developer",
+    "subhead": "Scalable, high-performance web apps built with <s>Angular</s>, <s>TypeScript</s>, <s>Next.js</s>, and <s>Tailwind</s>. Modular architecture, API integration, and platform migrations — collaborating with US-based remote teams.",
+    "ctaSecondary": "View portfolio",
+    "channelsLead": "Or directly via",
+    "responseHint": "I reply within 24 business hours",
+    "scrollCueLabel": "scroll",
+    "scrollCueAriaLabel": "Continue to About"
+  },
+  "About": {
+    "eyebrow": "About",
+    "headlineLead": "I build interfaces that",
+    "headlineHighlight": "age well",
+    "bioParagraph1": "Frontend developer focused on <s>Angular</s>, <s>TypeScript</s>, and <s>Next.js</s>. {years, plural, one {Over # year} other {Over # years}} building product interfaces from {location}, mostly remote with US and LATAM teams.",
+    "bioParagraph2": "I specialize in modular architecture and components that survive the next redesign — the kind of code next year's dev can read without pinging the author of today's.",
+    "captions": {
+      "desktop": "Landings & marketing — Next.js + Tailwind",
+      "devices": "Responsive components — Angular & React"
+    },
+    "exitCta": {
+      "lead": "Sounds like you?"
+    }
+  },
+  "Experience": {
+    "eyebrow": "Experience",
+    "headlineLead": "From freelance to",
+    "headlineHighlight": "frontend lead",
+    "headlineTrail": "— without lowering the bar.",
+    "currentLabel": "Present",
+    "highlightsLabel": "Highlights",
+    "sidebarLabel": "Career path",
+    "sidebarAriaLabel": "List of professional experiences",
+    "timelineLabel": "Timeline",
+    "timelineBarAriaLabel": "View {company} details ({start} — {end})",
+    "timelineHint": "Click a bar or a sidebar entry",
+    "educationLabel": "Education",
+    "resume": {
+      "cta": "Download full CV",
+      "metaAriaLabel": "File metadata",
+      "format": "PDF",
+      "language": "English",
+      "updated": "Updated {year, number}"
+    }
+  },
+  "ExperienceData": {
+    "trillium": {
+      "role": "Frontend Developer",
+      "summary": "Microfrontends with React and integration with internal APIs to ship new features. Leading the frontend team, keeping code clean and good practices across the internal UI.",
+      "highlights": [
+        { "value": "Lead", "label": "Of the frontend team" },
+        { "value": "React 19", "label": "Main stack" },
+        { "value": "Remote", "label": "US-based team" }
+      ]
+    },
+    "datascoring": {
+      "role": "Angular Frontend Developer",
+      "summary": "Progressive migration of a legacy platform to Angular — owned 90%+ of the migration work, significantly improving page speed, UX, and long-term maintainability.",
+      "highlights": [
+        { "value": "+90%", "label": "Of the migration" },
+        { "value": "Angular", "label": "Legacy → modern" },
+        { "value": "14m", "label": "Total duration" }
+      ]
+    },
+    "janover": {
+      "role": "Web Developer · Technical SEO",
+      "summary": "Vue/Nuxt components and Astro landings integrated with Hygraph (headless CMS). A/B testing with the product team and technical SEO — structured metadata, dynamic sitemaps, and robots config.",
+      "highlights": [
+        { "value": "A/B", "label": "Tests with product" },
+        { "value": "SEO", "label": "Advanced technical" },
+        { "value": "Multi", "label": "Vue · Nuxt · Astro" }
+      ]
+    },
+    "vmo": {
+      "role": "Angular Web Developer",
+      "summary": "Reusable components, REST API integration, and responsive/accessible design. Improved application performance by ~20% through code and resource optimization.",
+      "highlights": [
+        { "value": "+20%", "label": "Performance gain" },
+        { "value": "Angular", "label": "+ SASS + APIs" },
+        { "value": "10m", "label": "Duration" }
+      ]
+    },
+    "freelance": {
+      "role": "Web Developer",
+      "summary": "Custom sites with React, Vue, and PHP, plus 2D video games with Unity and GameMaker Studio 2. 5 web projects delivered with high client satisfaction.",
+      "highlights": [
+        { "value": "5+", "label": "Web projects" },
+        { "value": "Multi", "label": "React · Vue · PHP" },
+        { "value": "2D Games", "label": "Unity · GameMaker" }
+      ]
+    }
+  },
+  "Portfolio": {
+    "eyebrow": "Portfolio",
+    "headlineLead": "Sites already",
+    "headlineHighlight": "live",
+    "headlineTrail": "and working.",
+    "intro": "Studio products, client cases delivered under the Pagetook brand, and earlier work. Each one carries context — problem, decision, and stack. Click any to open the full case.",
+    "closingDividerLabel": "Your project, in this grid",
+    "closingCopy": "Have an idea that needs to ship fast and well? Let's talk — the next case in this grid could be yours.",
+    "cardImageAlt": "Screenshot of {name} — {description}",
+    "dialogImageAlt": "Screenshot of {name}",
+    "viewCase": "View case",
+    "dialog": {
+      "highlightsLabel": "Highlights",
+      "stackLabel": "Stack",
+      "roleLabel": "Role",
+      "caseStudyMeta": "Case study · {slug}",
+      "close": "Close",
+      "viewLive": "View live site"
+    }
+  },
+  "PortfolioData": {
+    "jarvlabs": {
+      "name": "JarvLabs",
+      "type": "Digital studio",
+      "category": "Studio · in-house products",
+      "location": "Bogotá, Colombia",
+      "role": "Design + development",
+      "shortDesc": "Independent digital studio building in-house products from Colombia for LATAM.",
+      "longDesc": [
+        "Studio's root site — the home where the products live (Citook, Pagetook) and where the conversation with potential clients happens. Designed as a statement: a few products, well crafted, with taste.",
+        "Mobile-first editorial layout, no services catalog, no premature pricing. The journey takes the reader from the promise (curated digital products) to the proof (each product solves a concrete problem) and from there to the manifesto and contact.",
+        "Tech decisions: Next.js 16 with App Router, Tailwind v4 with OKLCH tokens, motion/react for editorial reveals, light/dark locked to light for now. Zero cheap gradients; visual weight is carried by typography and a lime accent used sparingly."
+      ],
+      "highlights": [
+        "Custom typography system (Fraunces display + Satoshi body) self-hosted with next/font.",
+        "OKLCH tokens — electric lime accent stable in color mixes (color-mix in oklch).",
+        "One-page with scroll-spy + URL hash cleanup for SEO and clean deep links.",
+        "Performance: Lighthouse 96+, no heavy UI libraries, CSS-only mockups."
+      ]
+    },
+    "pagetook": {
+      "name": "Pagetook",
+      "type": "Web agency",
+      "category": "Agency · AI-powered websites",
+      "location": "LATAM",
+      "role": "End-to-end design + development",
+      "shortDesc": "Agency brand to build websites with AI in days — not months — for entrepreneurs and businesses across LATAM.",
+      "longDesc": [
+        "Consumer brand of the studio focused on closing the gap between 'I want a website' and 'it's live'. Aggressive positioning against the traditional agency: days, not months, and no inflated pricing.",
+        "Deep multipage structure: home with a strong value-prop, services page, real-cases portfolio, transparent pricing plans, manifesto, and a quote form. Each section is built with editorial motion and CSS micro-mockups showing 'before vs after' working with the brand.",
+        "Main challenge: communicate speed without sounding cheap. Solved with direct copy, real production cases, and a visual system that feels premium (detailed mockups, oversized typography, smooth animations) without falling into agency clichés."
+      ],
+      "highlights": [
+        "'Traditional agency vs Pagetook' comparison with animated CSS mockups.",
+        "Portfolio section with preview cards per delivered project.",
+        "FAQ accordion with honest copy about process, price, and timing.",
+        "Quote form with automatic project-type classification."
+      ]
+    },
+    "citook": {
+      "name": "Citook",
+      "type": "SaaS product",
+      "category": "SaaS · WhatsApp automatic booking",
+      "location": "LATAM",
+      "role": "Design + development of the marketing site",
+      "shortDesc": "B2B SaaS product: the WhatsApp conversation that fills the agenda for clinics, salons, and beauty centers.",
+      "longDesc": [
+        "Marketing site for the studio's SaaS product. Sells a behavior change (no more chasing clients by phone) using a 'before/after' narrative built on top of real WhatsApp and admin panel mockups.",
+        "Each section has a specific mockup that shows the benefit concretely: the conversation that confirms a booking, the morning dashboard panel, automatic cancellation recovery, the weekly report that lands in the owner's inbox.",
+        "Challenge: show value without a live demo. Solved with animated WhatsApp mockups (each message appearing sequentially with realistic timing) and a dashboard skeleton with believable data. The user 'sees how it works' without having to request access."
+      ],
+      "highlights": [
+        "Animated WhatsApp conversation mockup (sequential messages with typing indicators).",
+        "CSS-only dashboard skeleton with daily metrics and agenda.",
+        "Weekly Gantt-style view showing cancellation recovery.",
+        "Mock weekly report that simulates the real email the client receives."
+      ]
+    },
+    "toolstacksuite": {
+      "name": "ToolStackSuite",
+      "type": "Platform · utilities",
+      "category": "Platform · utilities for devs",
+      "location": "LATAM",
+      "role": "End-to-end design + development",
+      "shortDesc": "Free utility suite for devs and creators: QR generator, passwords, JSON, UUID, Base64, JWT, hashes, UTM builder. No sign-up, all in the browser.",
+      "longDesc": [
+        "SaaS platform of utilities — the kind of tools a dev uses once a month and ends up on any sketchy site full of ads. The proposal is the opposite: a single clean suite, bilingual, no tracking, no login, no usage caps.",
+        "Current catalog: customizable QR generator, password generator with fine-grained control, JSON formatter/minifier/validator, UUID v4 generator, Base64 encoder, URL encoder, JWT decoder with header + payload visualization, hash generator (SHA-1/256/384/512), and a UTM link builder for campaigns. Each tool is its own page with supporting copy (inline FAQ, use cases, exporting).",
+        "Key tech decision: everything is processed in the browser (zero-trust backend). Tools that touch sensitive data — passwords, JWT, hashes, JSON — never send the input to a server. That's a feature, not a detail: the user knows their data never leaves the tab."
+      ],
+      "highlights": [
+        "9+ online tools, all client-side (zero data sent to the server).",
+        "Bilingual from day one (ES/EN) with instant switching.",
+        "Technical SEO: each tool with its own route, meta tags, and FAQ schema.org.",
+        "Zero ads, zero registration, zero input tracking — privacy as a feature."
+      ]
+    },
+    "orinoco": {
+      "name": "Orinoco Sanduchería",
+      "type": "One-page",
+      "category": "Restaurant · artisan sandwich shop",
+      "location": "Yopal, Colombia",
+      "role": "Development · Pagetook client",
+      "shortDesc": "Artisan sandwich shop in Yopal with bread baked daily. Editorial one-page with photo menu, story, and WhatsApp ordering.",
+      "longDesc": [
+        "Client case delivered under the Pagetook brand. An artisan sandwich shop in Yopal that needed a serious digital presence but didn't want an app: WhatsApp orders, the story behind the brand, and a menu with a hero product in every slot.",
+        "Design decisions: display typography with personality (Fraunces for the headlines), warm palette reflecting the product flavor, generous photography of the bread and sandwiches, scroll micro-animations that add rhythm without distracting.",
+        "The site started generating WhatsApp orders from the first week online — conversion happens directly in the chat, with no intermediate form. Zero friction."
+      ],
+      "highlights": [
+        "Editorial one-page with menu, process story, and location.",
+        "Interactive map of the venue with a direct Google Maps route.",
+        "Primary CTA deep-links to WhatsApp with a prefilled message.",
+        "Hero with full-bleed product photography and typographic lockup."
+      ]
+    },
+    "caribevan": {
+      "name": "CaribeVan",
+      "type": "One-page",
+      "category": "Transport · family trips",
+      "location": "Barranquilla, Colombia",
+      "role": "Development · Pagetook client",
+      "shortDesc": "Private van with driver for family trips to the Colombian Caribbean. Direct WhatsApp booking, no forms.",
+      "longDesc": [
+        "Client case delivered under the Pagetook brand. A family-run tourist transport operation in the Colombian Caribbean that needed to convey trust (safe van, driver who knows the region) in under 30 seconds.",
+        "One-page structure with three clear blocks: destinations (with real geographic coordinates as an editorial detail), postcards from past trips (testimonials styled as travel tickets), and vehicle specs (formatted as a 'route sheet' with small numbers and technical typography).",
+        "Challenge: balance the Caribbean imagery (color, warmth, joy) with the seriousness of a family travel decision. Solved with a deep-blue + solar-yellow accent palette, documentary photography, and editorial micro-details (cards signed by the driver, airline-style route numbers)."
+      ],
+      "highlights": [
+        "Destinations section with geographic coordinates as an editorial detail.",
+        "Postcard-testimonials styled as signed travel tickets.",
+        "Vehicle route sheet with airline-style numbered specs.",
+        "Single CTA: WhatsApp booking, no form."
+      ]
+    },
+    "daniel-demo-reel": {
+      "name": "Daniel G. · Demo Reel",
+      "type": "Creative portfolio",
+      "category": "Portfolio · 2D animator",
+      "location": "Personal client",
+      "role": "Site design + development",
+      "shortDesc": "Demo reel and portfolio for Daniel Galindo, a 2D animator specialized in Toon Boom Harmony. Editorial one-page with embedded video reel, projects, and bio.",
+      "longDesc": [
+        "Portfolio case for a 2D animator. The challenge: the site had to feel as carefully crafted as the work it shows — a demo reel is the first professional impression; it couldn't fight the video for the spotlight, but it couldn't disappear either.",
+        "One-page layout with clear narrative hierarchy: hero with embedded video reel + editorial 'spec sheet' (duration, resolution, framerate), individual project section, bio, and contact. The heavy-stroke display typography gives identity without competing with the reel's color.",
+        "Tech details: EN/ES + light/dark toggle on the client side, video embedded via Vimeo (better than YouTube for showreels because of privacy and branding), scroll micro-animations adding rhythm between sections. Deployed on Vercel — fast and frictionless to iterate copy based on client feedback."
+      ],
+      "highlights": [
+        "Hero with embedded video reel and editorial spec sheet (duration, resolution, fps).",
+        "Bilingual ES/EN + light/dark toggle with persistent preferences.",
+        "Individual projects section with thumbnails and role context.",
+        "Display typography with personality — identity without stealing the reel's spotlight."
+      ]
+    },
+    "koaladevs": {
+      "name": "KoalaDevs",
+      "type": "Multi-page",
+      "category": "Web studio · development services",
+      "location": "Bogotá, Colombia",
+      "role": "End-to-end design + development",
+      "shortDesc": "Design and web development studio in Bogotá. Corporate site with services, process, plans, and FAQ.",
+      "longDesc": [
+        "Previous iteration — the site where I learned what later became the foundation of the current studio. Classic corporate structure (services, process, benefits, plans, FAQ) but already with the brand-mascot pattern and a consistent palette.",
+        "I keep it in the portfolio because it's the honest version of the journey: not everything I build is Next.js 16 with OKLCH tokens. KoalaDevs was where many decisions were first tested (editorial plans section, FAQ accordion, integrated contact form) that were later refined in Pagetook.",
+        "Lighter stack (HTML + Tailwind, deployed on Cloudflare Pages) — fit-for-purpose for a services landing without login or dashboard. Site speed is still excellent."
+      ],
+      "highlights": [
+        "Plans system with comparable cards and a CTA per tier.",
+        "4-step workflow with contextual micro-explanations.",
+        "Accessible accordion FAQ with direct copy.",
+        "Consistent brand mascot across the experience."
+      ]
+    }
+  },
+  "EducationData": {
+    "degrees": {
+      "iberoamericana": {
+        "period": "Aug 2024 — Today",
+        "degree": "Software Engineering",
+        "institution": "Iberoamericana"
+      },
+      "cundinamarca": {
+        "period": "Aug 2018 — May 2022",
+        "degree": "Software Development Technologist",
+        "institution": "Universidad de Cundinamarca"
+      },
+      "sena": {
+        "period": "Feb 2016 — Dec 2017",
+        "degree": "Software Programming Technician",
+        "institution": "SENA"
+      }
+    },
+    "certifications": {
+      "uxui": {
+        "label": "Cert",
+        "degree": "UX/UI and Digital Prototyping",
+        "institution": "Udemy",
+        "period": "2022"
+      },
+      "git": {
+        "label": "Cert",
+        "degree": "Complete Git and GitHub from Scratch",
+        "institution": "Udemy",
+        "period": "2022"
+      },
+      "fundamentals": {
+        "label": "Cert",
+        "degree": "Programming Fundamentals",
+        "institution": "Udemy",
+        "period": "2022"
+      }
+    }
+  },
+  "Contact": {
+    "eyebrow": "Contact",
+    "headlineLead": "Let's talk about your",
+    "headlineHighlight": "next",
+    "headlineTrail": "project.",
+    "intro": "I'm open to collaborating on web products, Next.js or Angular migrations, SaaS platforms, and high-impact landings. If you have something in mind — <s>corporate, startup, or personal</s> — tell me and let's see how it fits.",
+    "channelsLabel": "Direct channels",
+    "closingLabel": "See you soon",
+    "status": {
+      "heading": "Where I am",
+      "location": {
+        "label": "Location",
+        "meta": "UTC−5"
+      },
+      "availability": {
+        "label": "Availability",
+        "value": "Open",
+        "meta": "To projects"
+      },
+      "modality": {
+        "label": "Modality",
+        "value": "Remote",
+        "meta": "LATAM & US"
+      }
+    },
+    "form": {
+      "eyebrow": "Write me",
+      "honeypotLabel": "Don't fill this field if you're human",
+      "nameLabel": "Name",
+      "namePlaceholder": "Your name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "hi@yourdomain.com",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Tell me the context, what you need, and timing if any.",
+      "submit": "Send message",
+      "submitPending": "Sending…",
+      "privacyHint": "Only I receive it. No newsletters, no auto-replies.",
+      "errors": {
+        "title": "Couldn't send",
+        "cooldown": "Wait {seconds}s before sending another message.",
+        "invalidResponse": "Invalid server response (HTTP {status})",
+        "serverFallback": "I couldn't send the message. Try again in a moment.",
+        "networkFallback": "I couldn't send the message. Try again or write me at the email below."
+      },
+      "success": {
+        "title": "Message sent",
+        "body": "Thanks for reaching out. I'll reply as soon as possible."
+      }
+    }
+  },
+  "ContactLinks": {
+    "emailSubject": "Hi Jhonatan",
+    "emailBody": "Hi Jhonatan,\n\nI'm writing because:\n\n— About me / company:\n— What I need:\n— Timing:\n\nThanks.",
+    "whatsappPrefill": "Hi Jhonatan, I saw your portfolio and wanted to reach out about a project."
+  },
+  "LocaleSwitch": {
+    "ariaLabel": "Change language",
+    "currentLabel": "Current language: {language}",
+    "es": "ES",
+    "en": "EN",
+    "esFull": "Spanish",
+    "enFull": "English"
+  }
+}
